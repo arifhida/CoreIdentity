@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using CoreIdentity.API.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CoreIdentity.API.Model.Mappings;
 
 namespace CoreIdentity.API
 {
@@ -72,8 +73,8 @@ namespace CoreIdentity.API
             });
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
-            
-            
+            AutoMapperConfiguration.Configure();
+
             services.Configure<JwtIssuerOptions>(options =>
             {
                 options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
