@@ -1,0 +1,6 @@
+{
+  "directory": "wwwroot/lib",
+  "script": {
+    "postinstall": "gulp inject-vendor"
+  }
+}

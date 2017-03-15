@@ -39,7 +39,9 @@ namespace CoreIdentity.API.Migrations
 
                     b.Property<long?>("UserId");
 
-                    b.Property<bool>("isActive");
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
 
                     b.HasKey("Id");
 
@@ -64,7 +66,9 @@ namespace CoreIdentity.API.Migrations
                     b.Property<string>("RoleName")
                         .HasMaxLength(150);
 
-                    b.Property<bool>("isActive");
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
 
                     b.HasKey("Id");
 
@@ -95,7 +99,9 @@ namespace CoreIdentity.API.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(150);
 
-                    b.Property<bool>("isActive");
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
 
                     b.HasKey("Id");
 
@@ -119,7 +125,9 @@ namespace CoreIdentity.API.Migrations
 
                     b.Property<long?>("UserId");
 
-                    b.Property<bool>("isActive");
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
 
                     b.HasKey("Id");
 
@@ -140,7 +148,7 @@ namespace CoreIdentity.API.Migrations
             modelBuilder.Entity("CoreIdentity.Model.Entities.UserInRole", b =>
                 {
                     b.HasOne("CoreIdentity.Model.Entities.Role", "Role")
-                        .WithMany("RoledUser")
+                        .WithMany("UserInRole")
                         .HasForeignKey("RoleId");
 
                     b.HasOne("CoreIdentity.Model.Entities.User", "User")

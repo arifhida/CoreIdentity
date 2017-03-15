@@ -17,6 +17,8 @@ using CoreIdentity.API.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CoreIdentity.API.Model.Mappings;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace CoreIdentity.API
 {
@@ -66,10 +68,25 @@ namespace CoreIdentity.API
             services.AddScoped<IUserInRoleRepository, UserInRoleRepository>();
             services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
             services.AddCors();
+
             services.Configure<RazorViewEngineOptions>(options =>
             {                
                 options.ViewLocationFormats.Add("~/wwwroot/app/{0}.html");
                 options.ViewLocationFormats.Add("~/wwwroot/app/{1}/{0}.html");
+            });
+            services.AddMvc(
+            config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("User",
+                                  policy => policy.RequireClaim("Username"));
+
             });
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
@@ -81,7 +98,7 @@ namespace CoreIdentity.API
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
-            services.AddMvc();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -114,12 +131,24 @@ namespace CoreIdentity.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvcWithDefaultRoute();
-            app.Run(async (context) =>
+            app.UseStatusCodePages(async context =>
             {
-                await context.Response.WriteAsync("Hello World!");
+
+                context.HttpContext.Response.ContentType = "text/plain";
+
+                await context.HttpContext.Response.WriteAsync(
+                    "Status code page, status code: " +
+                    context.HttpContext.Response.StatusCode);
             });
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                TokenValidationParameters = tokenValidationParameters
+            });
+            app.UseMvcWithDefaultRoute();
+            
         }
     }
 }

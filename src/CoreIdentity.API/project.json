@@ -29,7 +29,8 @@
     "Microsoft.AspNetCore.Authorization": "1.1.0",
     "System.IdentityModel.Tokens.Jwt": "5.1.2",
     "AutoMapper.Data": "1.0.0-beta1",
-    "FluentValidation": "6.4.0"
+    "FluentValidation": "6.4.0",
+    "Microsoft.AspNetCore.Authentication.JwtBearer": "1.1.0"
   },
 
   "tools": {

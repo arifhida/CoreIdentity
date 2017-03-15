@@ -21,6 +21,7 @@ namespace CoreIdentity.Data.Abstract
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindByAsyncIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);

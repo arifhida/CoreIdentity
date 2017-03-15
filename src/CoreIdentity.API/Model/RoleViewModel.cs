@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreIdentity.API.Model.Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,10 +13,14 @@ namespace CoreIdentity.API.Model
         public string RoleName { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public int UserCount { get; set; }
         public bool isActive { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var validator = new RoleViewModelValidator();
+            var result = validator.Validate(this);
+            return result.Errors.Select(item => new ValidationResult(item.ErrorMessage, new[] { item.PropertyName }));
             throw new NotImplementedException();
         }
     }

@@ -22,13 +22,15 @@ namespace CoreIdentity.API.Controllers
         private IUserRepository _userRepository;
         private readonly JsonSerializerSettings _serializerSettings;
         private IUserInRoleRepository _userInRoleRepository;
+        private IRoleRepository _roleRepository;
 
         public TokenController(IOptions<JwtIssuerOptions> jwtOptions, IUserRepository userRepository,
-            IUserInRoleRepository userInRoleRepository)
+            IUserInRoleRepository userInRoleRepository, IRoleRepository roleRepository)
         {
             _jwtOptions = jwtOptions.Value;
             _userRepository = userRepository;
             _userInRoleRepository = userInRoleRepository;
+            _roleRepository = roleRepository;
             _serializerSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented
@@ -37,31 +39,36 @@ namespace CoreIdentity.API.Controllers
        
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Get([FromForm] ApplicationUser applicationUser)
+        public async Task<IActionResult> Get([FromBody] ApplicationUser applicationUser)
         {
             var userIdentity = await GetClaimIdentity(applicationUser);
             if (userIdentity == null)
-            {
-                return BadRequest("Invalid credentials");
+            {                
+                return BadRequest("invalid credential");
             }
-            var roles = await _userInRoleRepository.FindByAsync(x => x.User.UserName == applicationUser.Username);
-            
+            var roles = await _userInRoleRepository.FindByAsyncIncluding(x => x.User.UserName == applicationUser.Username,
+                m => m.Role, n => n.User);
+            var roleClaims = new List<Claim>();
+            foreach (var item in roles)
+            {
+                roleClaims.Add(new Claim("Roles", item.Role.RoleName));
+            }            
             var claims = new[]
             {
                     new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Username),
                     new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                     new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-                    userIdentity.FindFirst("Username")                                     
+                    userIdentity.FindFirst("Username")                                                      
                 };
-            foreach (var item in roles)
-            {
-                var claim = new Claim("Roles", item.Role.RoleName);
-                claims.Append(claim);
-            }
+
+            var claimlist = claims.ToList();
+            claimlist.AddRange(roleClaims);
+
+            
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
                 audience: _jwtOptions.Audience,
-                claims: claims,
+                claims: claimlist.AsEnumerable(),
                 notBefore: _jwtOptions.NotBefore,
                 expires: _jwtOptions.Expiration,
                 signingCredentials: _jwtOptions.SigningCredentials);
@@ -90,15 +97,17 @@ namespace CoreIdentity.API.Controllers
         {
             var result = _userRepository.GetSingle(x => x.UserName == appUser.Username && x.Password == appUser.Password);
             if (result != null)
-            {               
-                
-                return Task.FromResult(new ClaimsIdentity(
+            {
+                var identity = new ClaimsIdentity(
                     new GenericIdentity(appUser.Username, "Token"),
                     new[]
                     {
-                        new Claim("Username",appUser.Username)
+                        new Claim("Username",appUser.Username)                             
+
                     }
-                    ));
+                    );
+               
+                return Task.FromResult(identity);
             }
             return Task.FromResult<ClaimsIdentity>(null);
         }

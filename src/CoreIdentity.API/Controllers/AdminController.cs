@@ -1,4 +1,9 @@
-﻿using CoreIdentity.Data.Abstract;
+﻿using AutoMapper;
+using CoreIdentity.API.Model;
+using CoreIdentity.Data.Abstract;
+using CoreIdentity.Model.Entities;
+using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -28,15 +33,99 @@ namespace CoreIdentity.API.Controllers
             };
         }
         [HttpGet("GetUser",Name ="GetAllUser")]
+        [Authorize(Policy = "User")]
         public async Task<IActionResult> Get()
         {
             var data = await _userRepository.GetAll();
             var json = JsonConvert.SerializeObject(data, _serializerSettings);
             return new OkObjectResult(json);
         }
-
-        public async Task<IActionResult> PostRole()
+        [HttpGet("GetUserById",Name ="GetUserByName")]
+        public async Task<IActionResult> GetUserById(int Id)
         {
+            //var data = await _userRepository.GetSingleAsync(x=> x.Id == Id, r=> r.UserRole);
+            var Userd = await _userInRoleRepository.GetSingleAsync(x => x.User.Id == Id, r => r.Role, u => u.User);
+            User user = null;
+            if (Userd == null)
+                user = await _userRepository.GetSingleAsync(x => x.Id == Id, r => r.UserRole);
+            else
+                user = Userd.User;
+            var _result = Mapper.Map<User, UserViewModel>(user);            
+            var json = JsonConvert.SerializeObject(_result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+        [HttpPost("AddRole",Name ="AddNewRole")]
+        public async Task<IActionResult> PostRole([FromForm] RoleViewModel role)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Role _newRole = Mapper.Map<RoleViewModel, Role>(role);
+            _roleRepository.Add(_newRole);
+            await _roleRepository.Commit();
+            var json = JsonConvert.SerializeObject(role, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
+        [HttpPost("AddUser", Name = "AddNewUser")]
+        public async Task<IActionResult> AddUser([FromBody]UserViewModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            User _newUser = Mapper.Map<UserViewModel, User>(user);
+            var _roles = Mapper.Map<IEnumerable<RoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _userinRoles = new List<UserInRole>();
+            foreach (var item in _roles)
+            {
+                var _userinrole = new UserInRole();
+                _userinrole.Role = item;
+                _userinrole.User = _newUser;
+                _userinRoles.Add(_userinrole);
+            }
+            //_newUser.UserRole = _userinRoles;
+            _userRepository.Add(_newUser);
+            await _userRepository.Commit();
+            var json = JsonConvert.SerializeObject(_newUser, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+        [HttpPost("UpdateUser", Name = "UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromBody]UserViewModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            User _newUser = Mapper.Map<UserViewModel, User>(user);
+            var _roles = Mapper.Map<IEnumerable<RoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _userinRoles = new List<UserInRole>();
+            foreach (var item in _roles)
+            {
+                var _userinrole = new UserInRole();
+                _userinrole.Role = item;
+                _userinrole.User = _newUser;
+                _userinRoles.Add(_userinrole);
+            }
+            _newUser.UserRole = _userinRoles;
+            _userRepository.Update(_newUser);
+            await _userRepository.Commit();
+            var json = JsonConvert.SerializeObject(_newUser, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+        [HttpGet("GetAllRole",Name ="AllRole")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var data = await _roleRepository.AllIncluding(x => x.UserInRole);
+            var result = Mapper.Map<IEnumerable<Role>, IEnumerable<RoleViewModel>>(data);
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+        [HttpGet("GetUserInRole", Name = "UserInRole")]
+        public async Task<IActionResult> GetAllUserInRole()
+        {
+            var data = await _userInRoleRepository.FindByAsyncIncluding(l=> l.User.UserName== "arif.hidayat", x => x.Role, r => r.User);
             return new OkObjectResult("");
         }
 

@@ -29,23 +29,26 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<User>().Property(e => e.Password).HasMaxLength(256);
             modelBuilder.Entity<User>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<User>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<User>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
 
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Role>().Property(e => e.RoleName).HasMaxLength(150);
             modelBuilder.Entity<Role>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<Role>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<Role>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
 
             modelBuilder.Entity<UserInRole>().ToTable("UserInRole");
             modelBuilder.Entity<UserInRole>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<UserInRole>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
-
+            modelBuilder.Entity<UserInRole>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<UserInRole>().HasOne(a => a.User)
                 .WithMany(u => u.UserRole);
-            modelBuilder.Entity<UserInRole>().HasOne(a => a.Role)
-                .WithMany(u => u.RoledUser);
+            modelBuilder.Entity<UserInRole>().HasOne(x => x.Role)
+                .WithMany(r => r.UserInRole);
             modelBuilder.Entity<OrderRequest>().ToTable("OrderRequest");    
             modelBuilder.Entity<OrderRequest>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<OrderRequest>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<OrderRequest>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<OrderRequest>().HasOne(a => a.User)
                 .WithMany(u => u.Order);
             base.OnModelCreating(modelBuilder);

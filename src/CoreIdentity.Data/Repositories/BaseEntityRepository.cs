@@ -86,6 +86,16 @@ namespace CoreIdentity.Data.Repositories
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
+        public virtual async Task<IEnumerable<T>> FindByAsyncIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.Where(predicate).ToListAsync();
+        }
+
         public virtual void Add(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);

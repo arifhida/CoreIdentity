@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "gulp-inject": "4.2.0",
+    "stream-series": "0.1.1",
+    "wiredep": "4.0.0"
+  },
+  "dependencies": {
+    "angular-ui-router": "0.4.2",
+    "checklist-model": "0.11.0"
+  }
+}
