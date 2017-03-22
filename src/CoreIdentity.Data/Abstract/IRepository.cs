@@ -13,25 +13,27 @@ namespace CoreIdentity.Data.Abstract
         Task<IEnumerable<T>> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> GetAll();
         Task<int> Count();
-        T GetSingle(int id);
+        T GetSingle(long id);
         T GetSingle(Expression<Func<T, bool>> predicate);
         T GetSingle(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-        Task<T> GetSingleAsync(int id);
+        Task<T> GetSingleAsync(long id);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> predicate);
         IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate);
+        IQueryable<T> FindQueryBy(Expression<Func<T, bool>> predicate);
         Task<IEnumerable<T>> FindByAsyncIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);
         void DeleteWhere(Expression<Func<T, bool>> predicate);
         Task Commit();
+        void CommitSync(T entity);
     }
 
     public interface IUserRepository : IEntityBaseRepository<User> { }
     public interface IRoleRepository : IEntityBaseRepository<Role> { }
-    public interface IUserInRoleRepository : IEntityBaseRepository<UserInRole> { }
+    
     public interface IOrderRequestRepository : IEntityBaseRepository<OrderRequest> { }
 
 }

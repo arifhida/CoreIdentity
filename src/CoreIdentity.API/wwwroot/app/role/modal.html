@@ -1,0 +1,25 @@
+﻿<div class="modal fade in" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form name="frmRole" ng-submit="saveData(role)" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{role.RoleName}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            <label for="rolename">Role Name</label>
+                            <input type="text" class="form-control" ng-model="role.RoleName" placeholder="role name" name="rolename" id="rolename" required />
+                            <span class="form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary"><i class="fa fa-spinner fa-spin"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -44,6 +44,17 @@
                     });
                 }
             }
+        }).state('roles', {
+            url: '/roles',
+            templateUrl: 'app/role/roles.html',
+            controller: 'roleController',
+            resolve: {
+                initialData: function ($http) {
+                    return $http.get('api/Admin/GetAllRole').then(function (response) {
+                        return response.data;
+                    });
+                }
+            }
         });
         $locationProvider.html5Mode(true);
     });   

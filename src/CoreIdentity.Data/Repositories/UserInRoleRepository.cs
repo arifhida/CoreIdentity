@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace CoreIdentity.Data.Repositories
 {
-    public class UserInRoleRepository : BaseEntityRepository<UserInRole>, IUserInRoleRepository
-    {
-        public UserInRoleRepository(CoreIdentityContext context) : base(context)
-        {
-        }
-    }
+    //public class UserInRoleRepository : BaseEntityRepository<UserInRole>, IUserInRoleRepository
+    //{
+    //    public UserInRoleRepository(CoreIdentityContext context) : base(context)
+    //    {
+    //    }
+    //}
 }

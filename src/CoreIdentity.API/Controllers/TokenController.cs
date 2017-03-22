@@ -21,15 +21,15 @@ namespace CoreIdentity.API.Controllers
         private readonly JwtIssuerOptions _jwtOptions;
         private IUserRepository _userRepository;
         private readonly JsonSerializerSettings _serializerSettings;
-        private IUserInRoleRepository _userInRoleRepository;
+        //private IUserInRoleRepository _userInRoleRepository;
         private IRoleRepository _roleRepository;
 
         public TokenController(IOptions<JwtIssuerOptions> jwtOptions, IUserRepository userRepository,
-            IUserInRoleRepository userInRoleRepository, IRoleRepository roleRepository)
+             IRoleRepository roleRepository)
         {
             _jwtOptions = jwtOptions.Value;
             _userRepository = userRepository;
-            _userInRoleRepository = userInRoleRepository;
+            
             _roleRepository = roleRepository;
             _serializerSettings = new JsonSerializerSettings
             {
@@ -46,12 +46,13 @@ namespace CoreIdentity.API.Controllers
             {                
                 return BadRequest("invalid credential");
             }
-            var roles = await _userInRoleRepository.FindByAsyncIncluding(x => x.User.UserName == applicationUser.Username,
-                m => m.Role, n => n.User);
+            var roles = await _userRepository.GetSingleAsync(x => x.UserName == applicationUser.Username && x.Password == applicationUser.Password,
+                y=> y.UserRole);
             var roleClaims = new List<Claim>();
-            foreach (var item in roles)
+            foreach (var item in roles.UserRole)
             {
-                roleClaims.Add(new Claim("Roles", item.Role.RoleName));
+                var role = _roleRepository.GetSingle(item.RoleId);
+                roleClaims.Add(new Claim("Roles", role.RoleName));
             }            
             var claims = new[]
             {

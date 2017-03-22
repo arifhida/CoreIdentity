@@ -11,6 +11,6 @@ namespace CoreIdentity.Data.Repositories
     {
         public UserRepository(CoreIdentityContext context) : base(context)
         {
-        }
+        }      
     }
 }

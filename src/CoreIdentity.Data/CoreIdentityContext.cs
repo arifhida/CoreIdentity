@@ -30,6 +30,7 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<User>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<User>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<User>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
+            
 
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Role>().Property(e => e.RoleName).HasMaxLength(150);
@@ -41,10 +42,13 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<UserInRole>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<UserInRole>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<UserInRole>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
-            modelBuilder.Entity<UserInRole>().HasOne(a => a.User)
-                .WithMany(u => u.UserRole);
-            modelBuilder.Entity<UserInRole>().HasOne(x => x.Role)
-                .WithMany(r => r.UserInRole);
+            modelBuilder.Entity<UserInRole>().HasKey(ui => new { ui.UserId, ui.RoleId });
+            modelBuilder.Entity<UserInRole>().HasOne(u => u.Role)
+                .WithMany(ui => ui.UserInRole).HasForeignKey(ui => ui.RoleId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<UserInRole>().HasOne(u => u.User)
+                .WithMany(ui => ui.UserRole).HasForeignKey(ui => ui.UserId).OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<OrderRequest>().ToTable("OrderRequest");    
             modelBuilder.Entity<OrderRequest>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<OrderRequest>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");

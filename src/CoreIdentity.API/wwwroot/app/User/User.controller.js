@@ -27,7 +27,7 @@
             $scope.data = response.data;            
         });
         $scope.Save = function () {
-            $http.post('api/Admin/UpdateUser', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
+            $http.post('api/Admin/UpdateUserSync', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
                 function (response) {
                     console.log(response);
                 }, function (error) {

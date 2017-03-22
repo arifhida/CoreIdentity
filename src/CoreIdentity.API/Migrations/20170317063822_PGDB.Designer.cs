@@ -10,9 +10,10 @@ using CoreIdentity.Model.Entities;
 namespace CoreIdentity.API.Migrations
 {
     [DbContext(typeof(CoreIdentityContext))]
-    partial class CoreIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20170317063822_PGDB")]
+    partial class PGDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)

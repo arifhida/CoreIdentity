@@ -38,11 +38,11 @@ namespace CoreIdentity.Data.Repositories
             return await query.ToListAsync();
         }
 
-        public T GetSingle(int id)
+        public T GetSingle(long id)
         {
             return _context.Set<T>().FirstOrDefault(x => x.Id == id);
         }
-        public async Task<T> GetSingleAsync(int id)
+        public async Task<T> GetSingleAsync(long id)
         {
             return await  _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -86,6 +86,11 @@ namespace CoreIdentity.Data.Repositories
             return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
+        public virtual IQueryable<T> FindQueryBy(Expression<Func<T, bool>> predicate)
+        {
+            return _context.Set<T>().Where(predicate);
+        }
+
         public virtual async Task<IEnumerable<T>> FindByAsyncIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _context.Set<T>();
@@ -103,8 +108,8 @@ namespace CoreIdentity.Data.Repositories
         }
 
         public virtual void Update(T entity)
-        {
-            EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+        {            
+            EntityEntry dbEntityEntry = _context.Entry<T>(entity);            
             dbEntityEntry.State = EntityState.Modified;
         }
         public virtual void Delete(T entity)
@@ -126,6 +131,23 @@ namespace CoreIdentity.Data.Repositories
         public virtual async Task Commit()
         {
             await _context.SaveChangesAsync();
+        }
+        public virtual void CommitSync(T entity)
+        {
+            _context.Update<T>(entity);
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                foreach (var item in ex.Entries)
+                {
+                    var type = item.GetType();
+                }
+                
+            }
+            
         }
     }
 }

@@ -12,8 +12,7 @@ namespace CoreIdentity.API.Model
         public long Id { get; set; }
         public string RoleName { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public int UserCount { get; set; }
+        public DateTime ModifiedDate { get; set; }        
         public bool isActive { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
