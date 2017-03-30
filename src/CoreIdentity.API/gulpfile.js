@@ -23,7 +23,10 @@ var paths = {
     bootstrapjs: webroot + "lib-npm/bootstrap/**/*.min.js",
     angular: webroot + "lib-npm/angular/*.min.js",
     localstorage: webroot + "lib-npm/angular-local-storage/*.min.js",
-    fontawesomecss: webroot + 'lib-npm/font-awesome/css/*.css'    
+    fontawesomecss: webroot + 'lib-npm/font-awesome/css/*.css',
+    slimscroll: webroot + 'lib-npm/slimscroll/*.js',
+    adminltejs: webroot + 'lib-npm/admin-lte/js/app.js',
+    adminltecss: webroot + 'lib-npm/admin-lte/css/**/*.min.css'
 };
 var ngroutepath = "./node_modules/";
 var libnpmPath = webroot + 'lib-npm/';
@@ -50,7 +53,9 @@ gulp.task('copy-npm', function () {
     gulp.src(ngroutepath + 'font-awesome/css/**.*')
     .pipe(gulp.dest(libnpmPath + 'font-awesome/css/'));
     gulp.src(ngroutepath + 'admin-lte/dist/**/*.*')
-    .pipe(gulp.dest(libnpmPath + 'admin-lte/'));    
+    .pipe(gulp.dest(libnpmPath + 'admin-lte/'));
+    gulp.src(ngroutepath + 'slimscroll/example/ssmaster/*.js')
+    .pipe(gulp.dest(libnpmPath + 'slimscroll/'));
 });
 gulp.task('inject:Index', function () {
     var moduleSrc = gulp.src(paths.ngModule, { read: false });
@@ -65,13 +70,16 @@ gulp.task('inject:Index', function () {
     var ngSrc = gulp.src(paths.angular, { read: false });
     var ngStorage = gulp.src(paths.localstorage, { read: false });
     var faSrc = gulp.src(paths.fontawesomecss, { read: false });
+    var slimSrc = gulp.src(paths.slimscroll, { read: false });
+    var adminlteSrc = gulp.src(paths.adminltejs, { read: false });
+    var adminCssSrc = gulp.src(paths.adminltecss, { read: false });
     gulp.src(webroot + 'app/Index.html')
         .pipe(wiredep({
             optional: 'configuration',
             goes: 'here',
             ignorePath: '..'
         }))
-        .pipe(inject(series(jquerySrc, bootjsSrc, ngSrc, npmSrc, ngStorage, scriptSrc, moduleSrc, controllerSrc, routeSrc), { ignorePath: '/wwwroot' }))
-        .pipe(inject(series(styleSrc, bootstrapcssSrc, faSrc), { ignorePath: '/wwwroot' }))
+        .pipe(inject(series(jquerySrc, bootjsSrc, slimSrc, adminlteSrc, ngSrc, npmSrc, ngStorage, scriptSrc, moduleSrc, controllerSrc, routeSrc), { ignorePath: '/wwwroot' }))
+        .pipe(inject(series(styleSrc, bootstrapcssSrc, faSrc, adminCssSrc), { ignorePath: '/wwwroot' }))
         .pipe(gulp.dest(webroot + 'app'));
 });

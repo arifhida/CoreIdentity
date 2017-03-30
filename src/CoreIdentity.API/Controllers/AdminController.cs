@@ -56,7 +56,7 @@ namespace CoreIdentity.API.Controllers
             return new OkObjectResult(json);
         }
         [HttpPost("AddRole",Name ="AddNewRole")]
-        public async Task<IActionResult> PostRole([FromForm] RoleViewModel role)
+        public async Task<IActionResult> PostRole([FromBody] RoleViewModel role)
         {
             if (!ModelState.IsValid)
             {
@@ -64,6 +64,19 @@ namespace CoreIdentity.API.Controllers
             }
             Role _newRole = Mapper.Map<RoleViewModel, Role>(role);
             _roleRepository.Add(_newRole);
+            await _roleRepository.Commit();
+            var json = JsonConvert.SerializeObject(role, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+        [HttpPost("UpdateRole", Name = "UpdateRole")]
+        public async Task<IActionResult> UpdateRole([FromBody] RoleViewModel role)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Role _newRole = Mapper.Map<RoleViewModel, Role>(role);
+            _roleRepository.Update(_newRole);
             await _roleRepository.Commit();
             var json = JsonConvert.SerializeObject(role, _serializerSettings);
             return new OkObjectResult(json);
@@ -77,7 +90,7 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<RoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
@@ -101,7 +114,7 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<RoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
@@ -119,15 +132,15 @@ namespace CoreIdentity.API.Controllers
             var json = JsonConvert.SerializeObject(user, _serializerSettings);
             return new OkObjectResult(json);
         }
-        [HttpPost("UpdateUserSync", Name = "UpdateUserSync")]
-        public IActionResult UpdateUserSync([FromBody]UserViewModel user)
+        [HttpPost("UpdateUserData", Name = "UpdateUserData")]
+        public async Task<IActionResult> UpdateUserData([FromBody]UserViewModel user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<RoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
@@ -139,28 +152,8 @@ namespace CoreIdentity.API.Controllers
 
             }
 
-            var existingUser = _userRepository.GetSingle(x => x.Id == user.Id, r => r.UserRole);
-             
-            foreach (var item in existingUser.UserRole)
-            {
-                if (_newUser.UserRole.Where(x => x.RoleId == item.RoleId).Count() < 1)
-                {
-                    _userinRoles.Add(item);
-                }
-            }
-            foreach (var item in _newUser.UserRole)
-            {
-                //var isExist = existingUser.UserRole.Where(x => x.RoleId == item.RoleId);
-                if (existingUser.UserRole.Where(x=> x.RoleId == item.RoleId).Count() < 1)
-                    existingUser.UserRole.Add(item);
-            }
-            foreach (var item in _userinRoles)
-            {
-                
-                existingUser.UserRole.Remove(item);
-            }
-            
-            _userRepository.CommitSync(existingUser);
+            _userRepository.Update(_newUser,excludeProperties: "Password,UserName");
+            await _userRepository.Commit();
             var json = JsonConvert.SerializeObject(user, _serializerSettings);
             return new OkObjectResult(json);
         }
@@ -172,12 +165,60 @@ namespace CoreIdentity.API.Controllers
             var json = JsonConvert.SerializeObject(result, _serializerSettings);
             return new OkObjectResult(json);
         }
-        //[HttpGet("GetUserInRole", Name = "UserInRole")]
-        //public async Task<IActionResult> GetAllUserInRole()
-        //{
-        //    //var data = await _userInRoleRepository.FindByAsyncIncluding(l=> l.User.UserName== "arif.hidayat", x => x.Role, r => r.User);
-        //    return new OkObjectResult("");
-        //}
+
+        [HttpPost("GetRoleByName",Name ="RoleByName")]
+        public async Task<IActionResult> GetRoleByName([FromBody]string role)
+        {
+            var roles = await _roleRepository.FindByAsync(x => x.RoleName == role);
+            var exist = roles.Count() > 0;
+            if (exist)
+            {
+                return BadRequest("role name is exist");
+            }
+            var result = new
+            {
+                Message = "rolename available"
+            };
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
+        [HttpPost("GetUserName", Name = "GetUserName")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckUserName([FromBody]string username)
+        {
+            var _users = await _userRepository.FindByAsync(x => x.UserName == username);
+            var exist = _users.Count() > 0;
+            if (exist)
+            {
+                return BadRequest("Username is already exist");
+            }
+            var result = new
+            {
+                Message = "user available"
+            };
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
+        [HttpPost("GetUserEmail", Name = "GetUserEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckEmail([FromBody]string email)
+        {
+            var _users = await _userRepository.FindByAsync(x => x.Email == email);
+            var exist = _users.Count() > 0;
+            if (exist)
+            {
+                return BadRequest("email is already exist");
+            }
+            var result = new
+            {
+                Message = "email available"
+            };
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
 
     }
 }

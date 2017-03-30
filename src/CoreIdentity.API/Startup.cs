@@ -65,7 +65,7 @@ namespace CoreIdentity.API
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-            //services.AddScoped<IUserInRoleRepository, UserInRoleRepository>();
+            services.AddScoped<IUserInRoleRepository, UserInRoleRepository>();
             services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
             services.AddCors();
 

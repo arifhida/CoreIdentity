@@ -77,6 +77,8 @@ namespace CoreIdentity.API.Migrations
                     UserId = table.Column<long>(nullable: false),
                     RoleId = table.Column<long>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
                     isActive = table.Column<bool>(nullable: false, defaultValue: true)
                 },

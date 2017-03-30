@@ -10,7 +10,7 @@ using CoreIdentity.Model.Entities;
 namespace CoreIdentity.API.Migrations
 {
     [DbContext(typeof(CoreIdentityContext))]
-    [Migration("20170317063822_PGDB")]
+    [Migration("20170327023025_PGDB")]
     partial class PGDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,9 @@ namespace CoreIdentity.API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()

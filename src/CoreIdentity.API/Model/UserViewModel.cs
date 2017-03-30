@@ -14,7 +14,7 @@ namespace CoreIdentity.API.Model
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public List<RoleViewModel> Roles { get; set; }        
+        public List<UserInRoleViewModel> Roles { get; set; }        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validator = new UserViewModelValidator();

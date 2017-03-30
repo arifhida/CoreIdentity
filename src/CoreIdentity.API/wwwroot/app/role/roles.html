@@ -1,24 +1,46 @@
-﻿
-<div class="box-body table-responsive no-padding">
-    <div class="col-xs-6">
-        <table class="table table-bordered table-hover table-striped">
-            <thead>
-                <tr>
-                    <td>Role</td>
-                    <td></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="role in roleList">
-                    <td>{{role.RoleName}}</td>
-                    <td><a style="cursor:pointer" ng-click="roleClick(role)"><i class="fa fa-edit"></i></a></td>
-                </tr>
-            </tbody>
-        </table>
+﻿<section class="content-header">
+    <h1>
+        Role
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-users"></i> Home</a></li>
+        <li class="active">Roles</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Roles</h3>
+
+                        <div class="box-tools">
+                            <a style="cursor:pointer" ng-click="newRole()"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="role in roleList">
+                                    <td>{{role.RoleName}}</td>
+                                    <td><a style="cursor:pointer" ng-click="roleClick(role)"><i class="fa fa-edit"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <mydirective>
+
+            </mydirective>
+        </div>
     </div>
-</div>
-
-<mydirective>
-
-</mydirective>
+</section>
 

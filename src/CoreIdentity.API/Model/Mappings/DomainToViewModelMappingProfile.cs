@@ -12,8 +12,10 @@ namespace CoreIdentity.API.Model.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<Role, RoleViewModel>();
+            Mapper.CreateMap<UserInRole, UserInRoleViewModel>();
             Mapper.CreateMap<User, UserViewModel>().ForMember(x => x.Roles,
-                r => r.MapFrom(o => o.UserRole.Select(k => k.Role)));
+                r => r.MapFrom(o => o.UserRole));
+            
             
         }
     }

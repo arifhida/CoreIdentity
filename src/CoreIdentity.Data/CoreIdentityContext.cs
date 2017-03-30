@@ -39,6 +39,7 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Role>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
 
             modelBuilder.Entity<UserInRole>().ToTable("UserInRole");
+            modelBuilder.Entity<UserInRole>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<UserInRole>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<UserInRole>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
             modelBuilder.Entity<UserInRole>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);

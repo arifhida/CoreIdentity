@@ -25,15 +25,15 @@ namespace CoreIdentity.Data.Abstract
         Task<IEnumerable<T>> FindByAsyncIncluding(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         void Add(T entity);
         void Update(T entity);
+        void Update(T entity, string excludeProperties = "");      
         void Delete(T entity);
         void DeleteWhere(Expression<Func<T, bool>> predicate);
-        Task Commit();
-        void CommitSync(T entity);
+        Task Commit();        
     }
 
     public interface IUserRepository : IEntityBaseRepository<User> { }
     public interface IRoleRepository : IEntityBaseRepository<Role> { }
-    
+    public interface IUserInRoleRepository : IEntityBaseRepository<UserInRole> { }
     public interface IOrderRequestRepository : IEntityBaseRepository<OrderRequest> { }
 
 }

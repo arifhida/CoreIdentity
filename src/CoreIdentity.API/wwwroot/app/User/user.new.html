@@ -19,13 +19,13 @@
                     <div class="box-body">
                         <div class="form-group" ng-class="{ 'has-error': (form.username.$dirty && form.username.$error.required) || (form.username.$dirty && form.username.$error.useravailable) }">
                             <label for="username">User Name</label>
-                            <input type="text" class="form-control" name="username" ng-model="data.UserName" placeholder="Enter username" required>
+                            <input type="text" class="form-control" name="username" useravailable ng-model="data.UserName" placeholder="Enter username" required>
                             <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
                             <span ng-show="form.username.$error.useravailable" class="help-block">Someone already has that username</span>
                         </div>
                         <div class="form-group" ng-class="{ 'has-error': (form.email.$dirty && form.email.$error.required) || (form.email.$dirty && form.email.$invalid) || (form.email.$dirty && form.email.$error.emailexist) }">
                             <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" name="email" ng-model="data.Email" placeholder="Enter email" required>
+                            <input type="email" class="form-control" name="email" emailexist ng-model="data.Email" placeholder="Enter email" required>
                             <span ng-show="form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
                             <span ng-show="form.email.$dirty && form.email.$error.email" class="help-block">Email format is not valid</span>
                             <span ng-show="form.email.$dirty && form.email.$error.emailexist" class="help-block">Email address already exist</span>
@@ -36,10 +36,14 @@
                             <span ng-show="form.FullName.$dirty && form.FullName.$error.required" class="help-block">Full Name is required</span>
                         </div>
                         <div class="form-group">
+                            <label for="Password">Password</label>
+                            <input type="password" class="form-control" name="Password" ng-model="data.Password" placeholder="Enter Password">
+                        </div>
+                        <div class="form-group">
                             <label for="Chk">Roles</label>
                             <div ng-repeat="role in roles" class="checkbox">
                                 <label>
-                                    <input type="checkbox" ng-checked="checked(role,data.Roles)" ng-click="change(role)"> {{ role.RoleName}}
+                                    <input type="checkbox" data-checklist-model="data.Roles" data-checklist-value="role"> {{ role.RoleName}}
                                 </label>
                             </div>
                         </div>
@@ -52,6 +56,3 @@
         </div>
     </div>
 </section>
-<div>
-    {{data.Roles}}
-</div>

@@ -35,7 +35,7 @@
 
         }).state('userNew', {
             url: '/newUser',
-            templateUrl: 'app/User/user.detail.html',
+            templateUrl: 'app/User/user.new.html',
             controller: 'newUserController',
             resolve: {
                 initialData: function ($http) {

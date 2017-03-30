@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using CoreIdentity.API.Model;
+using CoreIdentity.Data.Abstract;
+using Newtonsoft.Json;
+using CoreIdentity.Model.Entities;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,40 +17,40 @@ namespace CoreIdentity.API.Controllers
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private IUserRepository _userRepository;
+        private IUserInRoleRepository _userInRoleRepository;
+        private IRoleRepository _roleRepository;
+        private readonly JsonSerializerSettings _serializerSettings;
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public CustomerController(IUserRepository userRepository, IRoleRepository roleRepository,
+            IUserInRoleRepository userInRoleRepository)
         {
-            return "value";
+            _roleRepository = roleRepository;
+            _userInRoleRepository = userInRoleRepository;
+            _userRepository = userRepository;
+            _serializerSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            };
         }
-        [HttpGet("GetUser/{id}",Name ="GetUser")]
-        public string GetUser(string id)
+        [HttpPost("Register",Name ="Register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody]UserViewModel user)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            User _newUser = Mapper.Map<UserViewModel, User>(user);                    
+            _userRepository.Add(_newUser);
+            await _userRepository.Commit();
+            var result = new
+            {
+                Status = "Registration Success"
+            };
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
         }
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

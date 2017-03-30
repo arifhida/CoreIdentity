@@ -110,8 +110,44 @@ namespace CoreIdentity.Data.Repositories
         public virtual void Update(T entity)
         {            
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);            
+            var cols = dbEntityEntry.Collections;
+            foreach (var colection in cols)
+            {
+                var subentity = colection.CurrentValue;
+                foreach (var item in subentity)
+                {
+                    if ((item as BaseEntity).Id == 0)
+                        _context.Entry(item).State = EntityState.Added;
+                    else
+                        _context.Entry(item).State = EntityState.Modified;
+                }
+            }
             dbEntityEntry.State = EntityState.Modified;
         }
+
+        public virtual void Update(T entity, string excludeProperties = "")
+        {
+            EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+            var cols = dbEntityEntry.Collections;
+            foreach (var colection in cols)
+            {
+                var subentity = colection.CurrentValue;
+                foreach (var item in subentity)
+                {
+                    if ((item as BaseEntity).Id == 0)
+                        _context.Entry(item).State = EntityState.Added;
+                    else
+                        _context.Entry(item).State = EntityState.Modified;
+                }
+            }
+            
+            dbEntityEntry.State = EntityState.Modified;
+            foreach (var excludeProp in excludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                dbEntityEntry.Property(excludeProp).IsModified = false;
+            }
+        }
+
         public virtual void Delete(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);
@@ -132,22 +168,6 @@ namespace CoreIdentity.Data.Repositories
         {
             await _context.SaveChangesAsync();
         }
-        public virtual void CommitSync(T entity)
-        {
-            _context.Update<T>(entity);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                foreach (var item in ex.Entries)
-                {
-                    var type = item.GetType();
-                }
-                
-            }
-            
-        }
+       
     }
 }

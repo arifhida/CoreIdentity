@@ -118,6 +118,9 @@ namespace CoreIdentity.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
