@@ -9,5 +9,6 @@ namespace CoreIdentity.API.Model
     {
         public long Id { get; set; }
         public RoleViewModel Role { get; set; }
+        public bool Delete { get; set; }
     }
 }

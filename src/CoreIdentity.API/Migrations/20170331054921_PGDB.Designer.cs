@@ -10,7 +10,7 @@ using CoreIdentity.Model.Entities;
 namespace CoreIdentity.API.Migrations
 {
     [DbContext(typeof(CoreIdentityContext))]
-    [Migration("20170327023025_PGDB")]
+    [Migration("20170331054921_PGDB")]
     partial class PGDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,13 @@ namespace CoreIdentity.API.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<NpgsqlPoint>("Destination");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<int>("OrderStatus");
@@ -57,11 +57,14 @@ namespace CoreIdentity.API.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(256);
+
                     b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<string>("RoleName")
@@ -97,6 +100,9 @@ namespace CoreIdentity.API.Migrations
                     b.Property<string>("Password")
                         .HasMaxLength(256);
 
+                    b.Property<string>("Salt")
+                        .HasMaxLength(256);
+
                     b.Property<string>("UserName")
                         .HasMaxLength(150);
 
@@ -116,14 +122,14 @@ namespace CoreIdentity.API.Migrations
                     b.Property<long>("RoleId");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<bool>("isActive")

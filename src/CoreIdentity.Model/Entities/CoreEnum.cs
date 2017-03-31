@@ -12,4 +12,5 @@ namespace CoreIdentity.Model.Entities
         Done =3,
         Cancel=4
     }
+    
 }

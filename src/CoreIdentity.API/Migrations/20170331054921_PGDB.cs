@@ -17,6 +17,7 @@ namespace CoreIdentity.API.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    Description = table.Column<string>(maxLength: 256, nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
                     RoleName = table.Column<string>(maxLength: 150, nullable: true),
                     isActive = table.Column<bool>(nullable: false, defaultValue: true)
@@ -37,6 +38,7 @@ namespace CoreIdentity.API.Migrations
                     FullName = table.Column<string>(maxLength: 250, nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
                     Password = table.Column<string>(maxLength: 256, nullable: true),
+                    Salt = table.Column<string>(maxLength: 256, nullable: true),
                     UserName = table.Column<string>(maxLength: 150, nullable: true),
                     isActive = table.Column<bool>(nullable: false, defaultValue: true)
                 },

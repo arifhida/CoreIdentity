@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CoreIdentity.API.Model;
+using CoreIdentity.API.Options;
 using CoreIdentity.Data.Abstract;
 using CoreIdentity.Model.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -65,7 +66,8 @@ namespace CoreIdentity.API.Controllers
             Role _newRole = Mapper.Map<RoleViewModel, Role>(role);
             _roleRepository.Add(_newRole);
             await _roleRepository.Commit();
-            var json = JsonConvert.SerializeObject(role, _serializerSettings);
+            var createdRole = Mapper.Map<Role, RoleViewModel>(_newRole);
+            var json = JsonConvert.SerializeObject(createdRole, _serializerSettings);
             return new OkObjectResult(json);
         }
         [HttpPost("UpdateRole", Name = "UpdateRole")]
@@ -76,6 +78,7 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             Role _newRole = Mapper.Map<RoleViewModel, Role>(role);
+            _newRole.isActive = true;
             _roleRepository.Update(_newRole);
             await _roleRepository.Commit();
             var json = JsonConvert.SerializeObject(role, _serializerSettings);
@@ -90,7 +93,9 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
+            _newUser.Salt = StringHash.SaltGen();
+            _newUser.Password = StringHash.GetHash(_newUser.Password + _newUser.Salt);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<UserInRole>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
@@ -103,7 +108,8 @@ namespace CoreIdentity.API.Controllers
             //_newUser.UserRole = _userinRoles;
             _userRepository.Add(_newUser);
             await _userRepository.Commit();
-            var json = JsonConvert.SerializeObject(user, _serializerSettings);
+            var createdUser = Mapper.Map<User, UserViewModel>(_newUser);
+            var json = JsonConvert.SerializeObject(createdUser, _serializerSettings);
             return new OkObjectResult(json);
         }
         [HttpPost("UpdateUser", Name = "UpdateUser")]
@@ -114,18 +120,16 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<UserInRole>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
-                var _userinrole = new UserInRole();
-                _userinrole.RoleId = item.Id;
-                _userinrole.UserId = _newUser.Id;
-                _userinrole.User = _newUser;
-                _newUser.UserRole.Add(_userinrole);
+                item.UserId = _newUser.Id;
+                item.User = _newUser;
+                _newUser.UserRole.Add(item);
 
             }
-             
+
             _userRepository.Update(_newUser);
             await _userRepository.Commit();
 
@@ -140,19 +144,17 @@ namespace CoreIdentity.API.Controllers
                 return BadRequest(ModelState);
             }
             User _newUser = Mapper.Map<UserViewModel, User>(user);
-            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<Role>>(user.Roles);
+            var _roles = Mapper.Map<IEnumerable<UserInRoleViewModel>, IEnumerable<UserInRole>>(user.Roles);
             var _userinRoles = new List<UserInRole>();
             foreach (var item in _roles)
             {
-                var _userinrole = new UserInRole();
-                _userinrole.RoleId = item.Id;
-                _userinrole.UserId = _newUser.Id;
-                _userinrole.User = _newUser;
-                _newUser.UserRole.Add(_userinrole);
+                item.UserId = _newUser.Id;
+                item.User = _newUser;
+                _newUser.UserRole.Add(item);
 
             }
 
-            _userRepository.Update(_newUser,excludeProperties: "Password,UserName");
+            _userRepository.Update(_newUser,excludeProperties: "Password,UserName,Salt,isActive");
             await _userRepository.Commit();
             var json = JsonConvert.SerializeObject(user, _serializerSettings);
             return new OkObjectResult(json);

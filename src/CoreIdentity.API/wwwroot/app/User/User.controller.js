@@ -21,41 +21,71 @@
         $scope.id = param;
         $scope.roles = initialData;
         console.log($scope.roles);
-        $scope.InRoles = [];
+        $scope.Deleted = [];
         $scope.loading = false;
         $http.get('api/Admin/GetUserById?Id=' + $scope.id)
         .then(function (response) {
-            $scope.data = response.data;
+            $scope.data = response.data;            
         });
-        $scope.checked = function (role, Roles) {
+        $scope.checked = function (Id,Roles) {            
             if (angular.isArray(Roles)) {
-                for (var i = Roles.length; i--;) {
-                    if (Roles[i].Role.Id == role.Id)
+                for (var i = 0;i < Roles.length; i++) {
+                    if (Roles[i].Role.Id == Id && Roles[i].Delete == false)
                         return true;
                 }                
             } else {
                 return false;
             }
         }
-        $scope.change = function (role) {            
-            if ($scope.data != null && $scope.data.Roles.length > 0) {
+        $scope.change = function (role) {
+            if ($scope.data != null) {
                 var p = new Object();
                 var exist = false;
-                for(var i=0;i < $scope.data.Roles.length; i++){
-                   debugger;
+                for (var i = 0; i < $scope.data.Roles.length; i++) {
+                    if ($scope.data.Roles[i].Role.Id == role.Id) {
+                        exist = true;
+                        $scope.data.Roles[i].Delete = true;
+                    }
+
+                } if (exist == false) {
+                    p.Id = 0;
+                    p.Role = role;
+                    $scope.data.Roles.push(p);
+                }
+            }
+        }
+        $scope.click = function (role) {
+            debugger;
+            if ($scope.data != null) {
+                var p = new Object();
+                var exist = false;                
+                for(var i=0;i < $scope.data.Roles.length; i++){                   
                     if($scope.data.Roles[i].Role.Id == role.Id){
-                       exist = true;
-                       p = $scope.data.Roles[i];
-                       console.log(exist);
+                        exist = true;
+                        p = $scope.data.Roles[i];
+                        $scope.data.Roles.splice(i, 1);
+                        console.log(exist);
                     }
                     
                 }           
                 
-                if(exist){
-                    $scope.data.Roles.pop(p);
-                }else{
-                    p.Id = 0;
-                    p.Role = role;
+                if (exist) {                    
+                    $scope.Deleted.push(p);
+                } else {
+                    var deleted = false;
+                    if($scope.Deleted.length > 0){
+                        for(var i=0; i < $scope.Deleted.length;i++){
+                            if($scope.Deleted[i].Role.Id == role.Id){
+                                p = $scope.Deleted[i];
+                                $scope.Deleted.splice(i, 1);
+                                deleted = true;
+                            }
+                        }   
+                    }
+                    if(deleted == false){                   
+                        p.Id = 0;
+                        p.Role = role;                   
+                    }                 
                     $scope.data.Roles.push(p);
                 }
                 
@@ -64,7 +94,8 @@
                 p.Id = 0;
                 p.Role = role;
                 $scope.data.Roles.push(p);
-            }            
+            }
+                      
         }
 
 
@@ -93,6 +124,49 @@
                 }, function (error) {
                     console.log(error);
                 });
+
+        }
+        $scope.click = function (role) {
+            debugger;
+            if ($scope.data != null) {
+                var p = new Object();
+                var exist = false;
+                for (var i = 0; i < $scope.data.Roles.length; i++) {
+                    if ($scope.data.Roles[i].Role.Id == role.Id) {
+                        exist = true;
+                        p = $scope.data.Roles[i];
+                        $scope.data.Roles.splice(i, 1);
+                        console.log(exist);
+                    }
+
+                }
+
+                if (exist) {
+                    $scope.Deleted.push(p);
+                } else {
+                    var deleted = false;
+                    if ($scope.Deleted.length > 0) {
+                        for (var i = 0; i < $scope.Deleted.length; i++) {
+                            if ($scope.Deleted[i].Role.Id == role.Id) {
+                                p = $scope.Deleted[i];
+                                $scope.Deleted.splice(i, 1);
+                                deleted = true;
+                            }
+                        }
+                    }
+                    if (deleted == false) {
+                        p.Id = 0;
+                        p.Role = role;
+                    }
+                    $scope.data.Roles.push(p);
+                }
+
+            } else {
+                var p = new Object();
+                p.Id = 0;
+                p.Role = role;
+                $scope.data.Roles.push(p);
+            }
 
         }
     });

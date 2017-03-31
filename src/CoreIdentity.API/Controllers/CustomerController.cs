@@ -9,6 +9,7 @@ using CoreIdentity.Data.Abstract;
 using Newtonsoft.Json;
 using CoreIdentity.Model.Entities;
 using AutoMapper;
+using CoreIdentity.API.Options;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,7 +42,9 @@ namespace CoreIdentity.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            User _newUser = Mapper.Map<UserViewModel, User>(user);                    
+            User _newUser = Mapper.Map<UserViewModel, User>(user);
+            _newUser.Salt = StringHash.SaltGen();
+            _newUser.Password = StringHash.GetHash(_newUser.Password + _newUser.Salt);                  
             _userRepository.Add(_newUser);
             await _userRepository.Commit();
             var result = new

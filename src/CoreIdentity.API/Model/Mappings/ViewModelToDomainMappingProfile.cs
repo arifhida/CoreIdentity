@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CoreIdentity.API.Options;
 using CoreIdentity.Model.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace CoreIdentity.API.Model.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<UserViewModel, User>();
-            Mapper.CreateMap<RoleViewModel, Role>();            
+            Mapper.CreateMap<RoleViewModel, Role>();
+            Mapper.CreateMap<UserInRoleViewModel, UserInRole>();                        
         }
     }
 }

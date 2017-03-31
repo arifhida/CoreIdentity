@@ -6,6 +6,7 @@
     angular.module('app').controller('roleController', [
         '$scope', '$http', '$rootScope', 'initialData', function ($scope, $http, $rootScope, initialData) {
             $scope.loading = false;
+
             $scope.getData = function () {
                 $http.get('api/Admin/GetAllRole').then(function (response) {
                     $scope.roleList = response.data;
@@ -24,6 +25,7 @@
                 $scope.Mode = 'edit';
             };
             $scope.newRole = function () {
+                $scope.RoleId = 0;
                 $scope.Mode = 'new';
                 var element = angular.element('#myModal');
                 console.log(element);
@@ -38,6 +40,13 @@
                     $http.post('api/Admin/UpdateRole', role, { headers: { 'Content-Type': 'application/json' } })
                         .then(function (response) {                            
                             $scope.loading = false;
+                            for (var i = 0; i < $scope.roleList.length; i++) {
+                                debugger;
+                                if($scope.roleList[i].Id == role.Id)
+                                {
+                                    $scope.roleList.splice(i, 1,role);                                    
+                                }                                
+                            }                            
                             element.modal('hide');
                         }, function (error) {
                             console.log(error);
@@ -47,15 +56,13 @@
                     $http.post('api/Admin/AddRole', role, { headers: { 'Content-Type': 'application/json' } })
                         .then(function (response) {                            
                             $scope.loading = false;
+                            $scope.roleList.push(response);                           
                             element.modal('hide');
                         }, function (error) {
                             console.log(error);
                             $scope.loading = false;
                         });
-                }
-                            
-                
-                    
+                }          
                                
             }
 

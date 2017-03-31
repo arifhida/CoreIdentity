@@ -11,6 +11,7 @@ namespace CoreIdentity.Model
         DateTime CreatedDate { get; set; }
         DateTime ModifiedDate { get; set; }
         bool isActive { get; set; }
+        bool Delete { get; set; }
     }
 
     public class BaseEntity : IBaseEntity
@@ -19,5 +20,6 @@ namespace CoreIdentity.Model
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public bool isActive { get; set; }
+        public bool Delete { get; set; }
     }
 }

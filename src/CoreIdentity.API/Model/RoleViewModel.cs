@@ -11,13 +11,13 @@ namespace CoreIdentity.API.Model
     {
         public long Id { get; set; }
         public string RoleName { get; set; }
-        
+        public string Description { get; set; }        
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validator = new RoleViewModelValidator();
             var result = validator.Validate(this);
-            return result.Errors.Select(item => new ValidationResult(item.ErrorMessage, new[] { item.PropertyName }));
-            throw new NotImplementedException();
+            return result.Errors.Select(item => new ValidationResult(item.ErrorMessage, new[] { item.PropertyName }));           
         }
     }
 }

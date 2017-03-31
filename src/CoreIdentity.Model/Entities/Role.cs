@@ -12,6 +12,7 @@ namespace CoreIdentity.Model.Entities
             UserInRole = new List<UserInRole>();
         }
         public string RoleName { get; set; } 
+        public string Description { get; set; }
         public ICollection<UserInRole> UserInRole { get; set; }      
     }
 }

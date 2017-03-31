@@ -39,7 +39,7 @@
                             <label for="Chk">Roles</label>
                             <div ng-repeat="role in roles" class="checkbox">
                                 <label>
-                                    <input type="checkbox" ng-checked="checked(role,data.Roles)" ng-click="change(role)"> {{ role.RoleName}}
+                                    <input type="checkbox" ng-click="change(role)" ng-checked="checked(role.Id,data.Roles)" ng-value="role" /> {{ role.RoleName}}
                                 </label>
                             </div>
                         </div>
@@ -52,6 +52,3 @@
         </div>
     </div>
 </section>
-<div>
-    {{data.Roles}}
-</div>

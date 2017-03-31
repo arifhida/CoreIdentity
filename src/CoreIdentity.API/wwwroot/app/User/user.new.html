@@ -43,7 +43,7 @@
                             <label for="Chk">Roles</label>
                             <div ng-repeat="role in roles" class="checkbox">
                                 <label>
-                                    <input type="checkbox" data-checklist-model="data.Roles" data-checklist-value="role"> {{ role.RoleName}}
+                                    <input type="checkbox" ng-click="click(role)"> {{ role.RoleName}}
                                 </label>
                             </div>
                         </div>

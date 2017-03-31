@@ -46,7 +46,7 @@ namespace CoreIdentity.API.Controllers
             {                
                 return BadRequest("invalid credential");
             }
-            var roles = await _userRepository.GetSingleAsync(x => x.UserName == applicationUser.Username && x.Password == applicationUser.Password,
+            var roles = await _userRepository.GetSingleAsync(x => x.UserName == applicationUser.Username,
                 y=> y.UserRole);
             var roleClaims = new List<Claim>();
             foreach (var item in roles.UserRole)
@@ -96,8 +96,9 @@ namespace CoreIdentity.API.Controllers
 
         private Task<ClaimsIdentity> GetClaimIdentity(ApplicationUser appUser)
         {
-            var result = _userRepository.GetSingle(x => x.UserName == appUser.Username && x.Password == appUser.Password);
-            if (result != null)
+            var result = _userRepository.GetSingle(x => x.UserName == appUser.Username);
+
+            if (result != null && result.Password == StringHash.GetHash(appUser.Password + result.Salt))
             {
                 var identity = new ClaimsIdentity(
                     new GenericIdentity(appUser.Username, "Token"),

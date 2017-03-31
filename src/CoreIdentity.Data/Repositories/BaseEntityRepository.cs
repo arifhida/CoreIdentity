@@ -118,8 +118,11 @@ namespace CoreIdentity.Data.Repositories
                 {
                     if ((item as BaseEntity).Id == 0)
                         _context.Entry(item).State = EntityState.Added;
+                    else if ((item as BaseEntity).Delete)
+                        _context.Entry(item).State = EntityState.Deleted;
                     else
                         _context.Entry(item).State = EntityState.Modified;
+
                 }
             }
             dbEntityEntry.State = EntityState.Modified;
@@ -136,6 +139,8 @@ namespace CoreIdentity.Data.Repositories
                 {
                     if ((item as BaseEntity).Id == 0)
                         _context.Entry(item).State = EntityState.Added;
+                    else if ((item as BaseEntity).Delete)
+                        _context.Entry(item).State = EntityState.Deleted;
                     else
                         _context.Entry(item).State = EntityState.Modified;
                 }
