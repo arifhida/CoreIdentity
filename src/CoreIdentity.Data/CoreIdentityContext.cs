@@ -27,8 +27,8 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<User>().Property(e => e.UserName).HasMaxLength(150);
             modelBuilder.Entity<User>().Property(e => e.FullName).HasMaxLength(250);
             modelBuilder.Entity<User>().Property(e => e.Password).HasMaxLength(256);
-            modelBuilder.Entity<User>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
-            modelBuilder.Entity<User>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<User>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
+            modelBuilder.Entity<User>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<User>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<User>().Property(e => e.Salt).HasMaxLength(256);
             modelBuilder.Entity<User>().Ignore(e => e.Delete);
@@ -36,14 +36,14 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Role>().Property(e => e.RoleName).HasMaxLength(150);
             modelBuilder.Entity<Role>().Property(e => e.Description).HasMaxLength(256);
-            modelBuilder.Entity<Role>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Role>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<Role>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Role>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<Role>().Ignore(e => e.Delete);
 
             modelBuilder.Entity<UserInRole>().ToTable("UserInRole");
             modelBuilder.Entity<UserInRole>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<UserInRole>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<UserInRole>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<UserInRole>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<UserInRole>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<UserInRole>().HasKey(ui => new { ui.UserId, ui.RoleId });
@@ -55,17 +55,23 @@ namespace CoreIdentity.Data
 
 
             modelBuilder.Entity<OrderRequest>().ToTable("OrderRequest");    
-            modelBuilder.Entity<OrderRequest>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<OrderRequest>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderRequest>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<OrderRequest>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<OrderRequest>().HasOne(a => a.User)
                 .WithMany(u => u.Order);
             modelBuilder.Entity<OrderRequest>().Ignore(e => e.Delete);
 
-            modelBuilder.Entity<Category>().HasOne(x => x.Parent).WithMany()
-                .HasForeignKey(e => e.ParentId);
+            modelBuilder.Entity<Category>().ToTable("Category");
+            modelBuilder.Entity<Category>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Category>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Category>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
+            modelBuilder.Entity<Category>().HasOne(x => x.Parent).WithMany(e => e.SubCategory)
+                .HasForeignKey(e => e.ParentId).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+            modelBuilder.Entity<Category>().Ignore(e => e.Delete);
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

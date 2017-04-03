@@ -147,6 +147,7 @@ namespace CoreIdentity.Data.Repositories
             }
             
             dbEntityEntry.State = EntityState.Modified;
+            dbEntityEntry.Property("CreatedDate").IsModified = false;
             foreach (var excludeProp in excludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 dbEntityEntry.Property(excludeProp).IsModified = false;

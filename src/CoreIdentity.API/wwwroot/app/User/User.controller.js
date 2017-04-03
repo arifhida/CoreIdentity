@@ -16,14 +16,14 @@
                 });
             }
         }
-    ]).controller('DetailUserController', function ($scope, $http, $stateParams, initialData) {
+    ]).controller('DetailUserController', function ($scope, $http, $stateParams, initialData,$state) {
         var param = $stateParams.id;
         $scope.id = param;
         $scope.roles = initialData;
         console.log($scope.roles);
         $scope.Deleted = [];
         $scope.loading = false;
-        $http.get('api/Admin/GetUserById?Id=' + $scope.id)
+        $http.get('api/User/GetById?Id=' + $scope.id)
         .then(function (response) {
             $scope.data = response.data;            
         });
@@ -101,9 +101,8 @@
 
         $scope.Save = function () {
             $scope.loading = true;
-            $http.post('api/Admin/UpdateUserData', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
-                function (response) {
-                    //console.log(response);
+            $http.post('api/User/UpdateUser', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
+                function (response) {                    
                     $state.go('user');
                     $scope.loading = false;
                 }, function (error) {
@@ -117,7 +116,7 @@
     ).controller('newUserController', function ($scope, $http, initialData) {
         $scope.roles = initialData;
         $scope.Save = function () {
-            $http.post('api/Admin/AddUser', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
+            $http.post('api/User/AddUser', $scope.data, { headers: { 'Content-Type': 'application/json' } }).then(
                 function (response) {
                     console.log(response);
                     $state.go('user');
@@ -170,4 +169,5 @@
 
         }
     });
+
 })();

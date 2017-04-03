@@ -18,13 +18,43 @@ namespace CoreIdentity.API.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
+            modelBuilder.Entity("CoreIdentity.Model.Entities.Category", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryDescription");
+
+                    b.Property<string>("CategoryName");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<long?>("ParentId");
+
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("CoreIdentity.Model.Entities.OrderRequest", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<NpgsqlPoint>("Destination");
@@ -56,7 +86,7 @@ namespace CoreIdentity.API.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<string>("Description")
@@ -93,7 +123,7 @@ namespace CoreIdentity.API.Migrations
                         .HasMaxLength(250);
 
                     b.Property<DateTime>("ModifiedDate")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<string>("Password")
@@ -121,7 +151,7 @@ namespace CoreIdentity.API.Migrations
                     b.Property<long>("RoleId");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
 
                     b.Property<long>("Id")
@@ -140,6 +170,14 @@ namespace CoreIdentity.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserInRole");
+                });
+
+            modelBuilder.Entity("CoreIdentity.Model.Entities.Category", b =>
+                {
+                    b.HasOne("CoreIdentity.Model.Entities.Category", "Parent")
+                        .WithMany("SubCategory")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CoreIdentity.Model.Entities.OrderRequest", b =>

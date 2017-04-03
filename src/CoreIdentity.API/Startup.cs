@@ -67,6 +67,7 @@ namespace CoreIdentity.API
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserInRoleRepository, UserInRoleRepository>();
             services.AddScoped<IOrderRequestRepository, OrderRequestRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddCors();
 
             services.Configure<RazorViewEngineOptions>(options =>

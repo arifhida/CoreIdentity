@@ -32,7 +32,10 @@
                                 <tr ng-repeat="role in roleList">
                                     <td>{{role.RoleName}}</td>
                                     <td>{{role.Description}}</td>
-                                    <td><a style="cursor:pointer" ng-click="roleClick(role)"><i class="fa fa-edit"></i></a></td>
+                                    <td>
+                                        <a style="cursor:pointer" ng-click="roleClick(role)"><i class="fa fa-edit"></i></a>
+                                        <a style="cursor:pointer" ng-click="delete(role)" ><i class="fa fa-trash"></i></a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

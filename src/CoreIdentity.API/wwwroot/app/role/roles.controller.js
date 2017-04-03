@@ -14,7 +14,7 @@
             }
             $scope.roleList = initialData;
             $scope.RoleId = 0;
-
+            var original = $scope.Role;
 
             $scope.roleClick = function (role) {
                 var element = angular.element('#myModal');
@@ -37,7 +37,7 @@
                 role.Id = $scope.RoleId;
                 var element = angular.element('#myModal');
                 if ($scope.Mode == 'edit') {
-                    $http.post('api/Admin/UpdateRole', role, { headers: { 'Content-Type': 'application/json' } })
+                    $http.post('api/Role/UpdateRole', role, { headers: { 'Content-Type': 'application/json' } })
                         .then(function (response) {                            
                             $scope.loading = false;
                             for (var i = 0; i < $scope.roleList.length; i++) {
@@ -53,10 +53,10 @@
                             $scope.loading = false;
                         });
                 } else {
-                    $http.post('api/Admin/AddRole', role, { headers: { 'Content-Type': 'application/json' } })
+                    $http.post('api/Role/AddRole', role, { headers: { 'Content-Type': 'application/json' } })
                         .then(function (response) {                            
                             $scope.loading = false;
-                            $scope.roleList.push(response);                           
+                            $scope.roleList.push(response.data);                           
                             element.modal('hide');
                         }, function (error) {
                             console.log(error);
@@ -66,6 +66,22 @@
                                
             }
 
+            $scope.delete = function (role) {                
+                $http.delete('api/Role/DeleteRole?Id=' + role.Id, { headers: { 'Content-Type': 'application/json' } })
+                    .then(function (response) {
+                        for (var i = 0; i < $scope.roleList.length; i++) {
+                            debugger;
+                            if ($scope.roleList[i].Id == role.Id) {
+                                $scope.roleList.splice(i, 1);
+                            }
+                        }
+                    });
+            }
+            $scope.reset = function () {
+                $scope.Role = angular.copy(original);
+                $scope.frmRole.$setPristine();
+            }
+            
         }
     ])
     .directive('mydirective', function () {
