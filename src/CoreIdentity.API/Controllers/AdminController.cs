@@ -122,26 +122,7 @@ namespace CoreIdentity.API.Controllers
             return new OkObjectResult(json);
         }
 
-        [HttpPost("AddCategory",Name ="NewCategory")]
-        [AllowAnonymous]
-        public async Task<IActionResult> AddCategory()
-        {
-            var category = new Category { CategoryName = "Home", CategoryDescription = "Menu for home" };
-            var child = new Category { CategoryName = "test", CategoryDescription = "desc" };
-            category.SubCategory.Add(child);
-            _categoryRepository.Add(category);
-            await _categoryRepository.Commit();
-            return new NoContentResult();
-            
-        }
-        [HttpPost("GetCategory", Name = "GetCategory")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetCategory()
-        {
-            var data = await _categoryRepository.FindByAsyncIncluding(x=> x.ParentId == null,x => x.SubCategory);
-            var result = Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(data);
-            var json = JsonConvert.SerializeObject(result, _serializerSettings);
-            return new OkObjectResult(json);
-        }
+        
+        
     }
 }
