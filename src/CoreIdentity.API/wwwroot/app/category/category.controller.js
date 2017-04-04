@@ -18,6 +18,12 @@
             CategoryDescription: '',
             Children : []
         };
+        $scope.addRoot = function () {
+            nodeData = null;
+            $scope.cat.ParentId = 0;
+            var element = angular.element('#myModal');
+            element.modal('show');
+        }
         $scope.reset = function () {
             $scope.cat = angular.copy(defcat);
         }
@@ -32,7 +38,11 @@
         $scope.Save = function () {
             $http.post('api/Category/AddCategory', $scope.cat, { headers: { 'Content-Type': 'application/json' } })
             .then(function (response) {
-                nodeData.Children.push(response.data);
+                if (nodeData) {
+                    nodeData.Children.push(response.data);
+                } else {
+                    $scope.data.push(response.data);
+                }
                 var element = angular.element('#myModal');
                 element.modal('hide');
                 $scope.reset();

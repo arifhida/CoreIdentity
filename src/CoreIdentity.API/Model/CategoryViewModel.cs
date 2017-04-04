@@ -13,7 +13,7 @@ namespace CoreIdentity.API.Model
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
         public List<CategoryViewModel> Children { get; set; }
-        public long ParentId { get; set; }
+        public long? ParentId { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validator = new CategoryViewModelValidator();

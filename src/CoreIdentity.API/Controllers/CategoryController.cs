@@ -53,7 +53,7 @@ namespace CoreIdentity.API.Controllers
             return new OkObjectResult(json);
         }
 
-        [HttpPost("AddCategory", Name = "NewCategory")]        
+        [HttpPost("AddCategory", Name = "AddCategory")]        
         public async Task<IActionResult> AddCategory([FromBody] CategoryViewModel category)
         {
             var _newCategory = Mapper.Map<CategoryViewModel, Category>(category);            
@@ -75,6 +75,7 @@ namespace CoreIdentity.API.Controllers
             await _categoryRepository.Commit();
             return new NoContentResult();
         }
+        
         
     }
 }
