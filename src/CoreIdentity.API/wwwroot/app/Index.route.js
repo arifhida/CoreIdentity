@@ -55,6 +55,17 @@
                     });
                 }
             }
+        }).state('category', {
+            url: '/category',
+            templateUrl: 'app/category/index.html',
+            controller:'categoryController',
+            resolve: {
+                initialData: function ($http) {
+                    return $http.get('api/Category/GetAll').then(function (response) {
+                        return response.data;
+                    });
+                }
+            }
         });
         $locationProvider.html5Mode(true);
     });   

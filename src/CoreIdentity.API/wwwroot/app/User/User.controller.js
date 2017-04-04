@@ -15,6 +15,7 @@
 
                 });
             }
+            $scope.getData();
         }
     ]).controller('DetailUserController', function ($scope, $http, $stateParams, initialData,$state) {
         var param = $stateParams.id;

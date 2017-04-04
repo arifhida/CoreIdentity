@@ -28,7 +28,8 @@ namespace CoreIdentity.Data.Abstract
         void Update(T entity, string excludeProperties = "");      
         void Delete(T entity);
         void DeleteWhere(Expression<Func<T, bool>> predicate);
-        Task Commit();        
+        Task Commit();
+        void Save();      
     }
 
     public interface IUserRepository : IEntityBaseRepository<User> { }

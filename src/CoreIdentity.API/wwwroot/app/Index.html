@@ -9,29 +9,12 @@
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="/styles/site.css">
-    <link rel="stylesheet" href="/lib-npm/bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/lib-npm/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/lib-npm/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="/styles/site.css">    
+    <link rel="stylesheet" href="/lib-npm/bootstrap/css/bootstrap.min.css">    
     <link rel="stylesheet" href="/lib-npm/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/alt/AdminLTE-bootstrap-social.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/alt/AdminLTE-fullcalendar.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/alt/AdminLTE-select2.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/alt/AdminLTE-without-plugins.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-black-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-black.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-blue-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-blue.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-green-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-green.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-purple-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-purple.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-red-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-red.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-yellow-light.min.css">
-    <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/skin-yellow.min.css">
+    <link rel="stylesheet" href="/lib-npm/admin-lte/css/AdminLTE.min.css">   
     <link rel="stylesheet" href="/lib-npm/admin-lte/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="/lib-npm/angular-ui-tree/angular-ui-tree.min.css">
     <!-- endinject -->
 </head>
 <body ng-app="app" class="hold-transition skin-blue fixed sidebar-mini">
@@ -66,7 +49,7 @@
                        <a ui-sref="roles"><i class="fa fa-cogs"></i> Role</a>
                    </li>
                    <li>
-                       <a ui-sref="roles"><i class="fa fa-database"></i> Category</a>
+                       <a ui-sref="category"><i class="fa fa-database"></i> Category</a>
                    </li>
                </ul>
            </section>
@@ -79,26 +62,28 @@
 
     <!-- bower:js -->
     <!-- endbower -->
-    <!-- inject:js -->
-    <script src="/lib-npm/jquery/jquery.js"></script>    
-    <script src="/lib-npm/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/lib-npm/slimscroll/jquery.slimscroll.js"></script>
-    <script src="/lib-npm/admin-lte/js/app.js"></script>
-    <script src="/lib-npm/angular/angular.min.js"></script>
-    <script src="/lib-npm/angular-ui-router.js"></script>
-    <script src="/lib-npm/angular-ui-router.min.js"></script>
-    <script src="/lib-npm/checklist-model.js"></script>
-    <script src="/lib-npm/angular-local-storage/angular-local-storage.min.js"></script>
-    <script src="/scripts/app.js"></script>
-    <script src="/scripts/services/authInterceptor.js"></script>
-    <script src="/scripts/services/AuthServices.js"></script>
-    <script src="/app/login/login.controller.js"></script>
-    <script src="/app/main/main.controller.js"></script>
-    <script src="/app/role/role.directive.js"></script>
-    <script src="/app/role/roles.controller.js"></script>
-    <script src="/app/User/user.directive.js"></script>
-    <script src="/app/User/User.controller.js"></script>    
-    <script src="/app/Index.route.js"></script>
+    <!-- inject:js -->    
+    <script src="/lib-npm/jquery/jquery.min.js"></script>       
+    <script src="/lib-npm/bootstrap/js/bootstrap.min.js"></script> 
+    <script src="/lib-npm/slimscroll/jquery.slimscroll.min.js"></script>       
+    <script src="/lib-npm/admin-lte/js/app.js"></script>       
+    <script src="/lib-npm/angular/angular.min.js"></script>       
+    <script src="/lib-npm/angular-ui-router.js"></script>       
+    <script src="/lib-npm/angular-ui-router.min.js"></script>       
+    <script src="/lib-npm/checklist-model.js"></script>       
+    <script src="/lib-npm/angular-local-storage/angular-local-storage.min.js"></script>       
+    <script src="/lib-npm/angular-ui-tree/angular-ui-tree.min.js"></script>       
+    <script src="/scripts/app.js"></script>       
+    <script src="/scripts/services/authInterceptor.js"></script>       
+    <script src="/scripts/services/AuthServices.js"></script>       
+    <script src="/app/role/role.directive.js"></script>       
+    <script src="/app/User/user.directive.js"></script>       
+    <script src="/app/category/category.controller.js"></script>       
+    <script src="/app/login/login.controller.js"></script>       
+    <script src="/app/main/main.controller.js"></script>       
+    <script src="/app/role/roles.controller.js"></script>       
+    <script src="/app/User/User.controller.js"></script>       
+    <script src="/app/Index.route.js"></script>       
     <!-- endinject -->
 </body>
 </html>

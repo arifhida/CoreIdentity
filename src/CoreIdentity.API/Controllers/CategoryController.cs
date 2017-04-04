@@ -34,7 +34,7 @@ namespace CoreIdentity.API.Controllers
             };
         }
 
-        [HttpPost("GetAllCategory", Name = "GetCategory")]
+        [HttpGet("GetTree", Name = "GetTree")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategories()
         {
@@ -43,16 +43,38 @@ namespace CoreIdentity.API.Controllers
             var json = JsonConvert.SerializeObject(result, _serializerSettings);
             return new OkObjectResult(json);
         }
-
-        [HttpPost("AddCategory", Name = "NewCategory")]
+        [HttpGet("GetAll", Name = "GetTable")]
         [AllowAnonymous]
+        public async Task<IActionResult> GetAll()
+        {
+            var data = await _categoryRepository.GetAll();
+            var result = Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(data.Where(x=>x.ParentId ==null));
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
+        [HttpPost("AddCategory", Name = "NewCategory")]        
         public async Task<IActionResult> AddCategory([FromBody] CategoryViewModel category)
         {
             var _newCategory = Mapper.Map<CategoryViewModel, Category>(category);            
             _categoryRepository.Add(_newCategory);
             await _categoryRepository.Commit();
-            return new NoContentResult();
-
+            var result = Mapper.Map<Category, CategoryViewModel>(_newCategory);
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
         }
+        [HttpDelete("Delete",Name ="DeleteCategory")]
+        public async Task<IActionResult> Delete(long Id)
+        {
+            var _delCat = await _categoryRepository.GetSingleAsync(Id);
+            if(_delCat == null)
+            {
+                return new NotFoundResult();
+            }
+            _categoryRepository.Delete(_delCat);
+            await _categoryRepository.Commit();
+            return new NoContentResult();
+        }
+        
     }
 }

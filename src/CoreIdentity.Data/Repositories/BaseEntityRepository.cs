@@ -174,6 +174,10 @@ namespace CoreIdentity.Data.Repositories
         {
             await _context.SaveChangesAsync();
         }
+        public virtual void Save()
+        {
+            _context.SaveChanges();
+        }
        
     }
 }

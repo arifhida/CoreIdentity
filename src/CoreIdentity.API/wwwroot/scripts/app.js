@@ -4,7 +4,7 @@
 
 (function () {
     angular.module('authentication', ['ui.router', 'LocalStorageModule']);
-    angular.module('app', ['authentication','checklist-model']);
+    angular.module('app', ['authentication', 'checklist-model', 'ui.tree']);
     angular.module('app').controller('navController', function ($scope,$rootScope, localStorageService) {
         $scope.isAuthenticated = function () {
             var isAuth = localStorageService.get('authentication');
