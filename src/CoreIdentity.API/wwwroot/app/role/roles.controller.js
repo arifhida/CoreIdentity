@@ -6,13 +6,13 @@
     angular.module('app').controller('roleController', [
         '$scope', '$http', '$rootScope', 'initialData', function ($scope, $http, $rootScope, initialData) {
             $scope.loading = false;
-
+            $scope.q = '';
             $scope.getData = function () {
-                $http.get('api/Admin/GetAllRole').then(function (response) {
-                    $scope.roleList = response.data;
+                $http.get('api/Role/GetData', { headers: { 'Content-Type': 'application/json', 'q': $scope.q }}).then(function (response) {
+                    $scope.roleList = angular.copy(response.data);
                 });
             }
-            $scope.roleList = initialData;
+            $scope.roleList = angular.copy(initialData);
             $scope.RoleId = 0;
             var original = $scope.Role;
 

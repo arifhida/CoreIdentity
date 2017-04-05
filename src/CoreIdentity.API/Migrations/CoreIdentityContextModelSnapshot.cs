@@ -23,9 +23,11 @@ namespace CoreIdentity.API.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CategoryDescription");
+                    b.Property<string>("CategoryDescription")
+                        .HasMaxLength(550);
 
-                    b.Property<string>("CategoryName");
+                    b.Property<string>("CategoryName")
+                        .HasMaxLength(256);
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -78,6 +80,77 @@ namespace CoreIdentity.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OrderRequest");
+                });
+
+            modelBuilder.Entity("CoreIdentity.Model.Entities.Product", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("CategoriId");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<bool>("Delete");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<string>("ProductDescription")
+                        .HasMaxLength(550);
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("SKU")
+                        .HasMaxLength(100);
+
+                    b.Property<decimal>("UnitPrice");
+
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriId");
+
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("CoreIdentity.Model.Entities.ProductAttribute", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<bool>("Delete");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasAnnotation("Npgsql:DefaultValueSql", "current_timestamp");
+
+                    b.Property<string>("Name");
+
+                    b.Property<long>("ProductId");
+
+                    b.Property<bool>("isActive")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", true);
+
+                    b.Property<string>("value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductAttribute");
                 });
 
             modelBuilder.Entity("CoreIdentity.Model.Entities.Role", b =>
@@ -185,6 +258,22 @@ namespace CoreIdentity.API.Migrations
                     b.HasOne("CoreIdentity.Model.Entities.User", "User")
                         .WithMany("Order")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("CoreIdentity.Model.Entities.Product", b =>
+                {
+                    b.HasOne("CoreIdentity.Model.Entities.Category", "Category")
+                        .WithMany("Product")
+                        .HasForeignKey("CategoriId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CoreIdentity.Model.Entities.ProductAttribute", b =>
+                {
+                    b.HasOne("CoreIdentity.Model.Entities.Product", "Product")
+                        .WithMany("Attribute")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CoreIdentity.Model.Entities.UserInRole", b =>

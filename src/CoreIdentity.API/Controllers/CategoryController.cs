@@ -56,7 +56,8 @@ namespace CoreIdentity.API.Controllers
         [HttpPost("AddCategory", Name = "AddCategory")]        
         public async Task<IActionResult> AddCategory([FromBody] CategoryViewModel category)
         {
-            var _newCategory = Mapper.Map<CategoryViewModel, Category>(category);            
+            var _newCategory = Mapper.Map<CategoryViewModel, Category>(category);
+            _newCategory.ParentId = (_newCategory.ParentId == 0) ? null : _newCategory.ParentId;          
             _categoryRepository.Add(_newCategory);
             await _categoryRepository.Commit();
             var result = Mapper.Map<Category, CategoryViewModel>(_newCategory);

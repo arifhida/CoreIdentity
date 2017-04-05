@@ -16,8 +16,8 @@ namespace CoreIdentity.API.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CategoryDescription = table.Column<string>(nullable: true),
-                    CategoryName = table.Column<string>(nullable: true),
+                    CategoryDescription = table.Column<string>(maxLength: 550, nullable: true),
+                    CategoryName = table.Column<string>(maxLength: 256, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
                     ParentId = table.Column<long>(nullable: true),
@@ -69,6 +69,33 @@ namespace CoreIdentity.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CategoriId = table.Column<long>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    Delete = table.Column<bool>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    ProductDescription = table.Column<string>(maxLength: 550, nullable: true),
+                    ProductName = table.Column<string>(maxLength: 256, nullable: true),
+                    SKU = table.Column<string>(maxLength: 100, nullable: true),
+                    UnitPrice = table.Column<decimal>(nullable: false),
+                    isActive = table.Column<bool>(nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Product_Category_CategoriId",
+                        column: x => x.CategoriId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +152,31 @@ namespace CoreIdentity.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProductAttribute",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    Delete = table.Column<bool>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp"),
+                    Name = table.Column<string>(nullable: true),
+                    ProductId = table.Column<long>(nullable: false),
+                    isActive = table.Column<bool>(nullable: false, defaultValue: true),
+                    value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttribute", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductAttribute_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Category_ParentId",
                 table: "Category",
@@ -136,6 +188,16 @@ namespace CoreIdentity.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_CategoriId",
+                table: "Product",
+                column: "CategoriId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttribute_ProductId",
+                table: "ProductAttribute",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserInRole_RoleId",
                 table: "UserInRole",
                 column: "RoleId");
@@ -144,19 +206,25 @@ namespace CoreIdentity.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Category");
-
-            migrationBuilder.DropTable(
                 name: "OrderRequest");
 
             migrationBuilder.DropTable(
+                name: "ProductAttribute");
+
+            migrationBuilder.DropTable(
                 name: "UserInRole");
+
+            migrationBuilder.DropTable(
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Role");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Category");
         }
     }
 }

@@ -50,7 +50,7 @@
             controller: 'roleController',
             resolve: {
                 initialData: function ($http) {
-                    return $http.get('api/Admin/GetAllRole').then(function (response) {
+                    return $http.get('api/Role/GetData').then(function (response) {
                         return response.data;
                     });
                 }
