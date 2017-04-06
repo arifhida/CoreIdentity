@@ -1,5 +1,7 @@
 ﻿/// <reference path="../../lib/angular/angular.min.js" />
 /// <reference path="../../lib/angular/angular.js" />
+/// <reference path="../../lib-npm/angular-local-storage/angular-local-storage.min.js" />
+/// <reference path="../../lib-npm/angular-local-storage/angular-local-storage.js" />
 
 "use strict";
 (function () {
@@ -30,16 +32,15 @@
             }
             service.isAuthenticate = function () {
                 var tokenData = localStorageService.get('authentication');
-                if (tokenData) {
-                    alert(true);
-                }
+                return (tokenData !== null);
             }
 
             var _logout = function () {
-
+                localStorageService.clearAll();
             }
             service.login = _login;
             service.isAuthenticated = authenticationData;
+            service.logout = _logout;
             return service;
         }]);
     

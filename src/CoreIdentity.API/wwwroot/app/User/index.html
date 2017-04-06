@@ -17,9 +17,9 @@
                     <!--<a ui-sref="userNew"><i class="fa fa-plus"></i> Add</a>--></h3>
                     <div class="box-tools">                                               
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                            <input type="text" name="table_search" ng-model="q" class="form-control pull-right" placeholder="Search">
                             <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <button type="button" ng-click="getData()" class="btn btn-default"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
                     </div>
@@ -44,8 +44,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="box-footer">
-
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li ng-class="{'disabled': page == 0}"><a href="#" ng-click="prev()">&laquo;</a></li>
+                        <li><a>{{page + 1}} of {{totalPage}}</a></li>                       
+                        <li ng-class="{'disabled': page == totalPage- 1}"><a href="#" ng-click="next()">&raquo;</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

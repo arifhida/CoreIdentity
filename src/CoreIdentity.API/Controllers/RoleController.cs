@@ -74,7 +74,7 @@ namespace CoreIdentity.API.Controllers
             return new NoContentResult();
 
         }
-        [HttpGet("GetData",Name ="GetData")]
+        [HttpGet("GetData",Name ="GetRoles")]
         public async Task<IActionResult> Get()
         {
             var pagination = Request.Headers["Pagination"];

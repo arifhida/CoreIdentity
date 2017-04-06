@@ -76,6 +76,15 @@ namespace CoreIdentity.API.Controllers
             await _categoryRepository.Commit();
             return new NoContentResult();
         }
+        [HttpGet("GetCategory", Name = "GetCateogry")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get()
+        {
+            var data = await _categoryRepository.FindByAsync(x => x.isActive == true);
+            var result = Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(data);
+            var json = JsonConvert.SerializeObject(result, _serializerSettings);
+            return new OkObjectResult(json);
+        }
         
         
     }

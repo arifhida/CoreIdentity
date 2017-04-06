@@ -19,7 +19,8 @@ namespace CoreIdentity.API.Controllers
         private IUserInRoleRepository _userInRoleRepository;
         private IRoleRepository _roleRepository;
         private readonly JsonSerializerSettings _serializerSettings;
-
+        int page = 1;
+        int pageSize = 10;
 
         public UserController(IUserRepository userRepository, IRoleRepository roleRepository,
             IUserInRoleRepository userInRoleRepository)
@@ -98,6 +99,30 @@ namespace CoreIdentity.API.Controllers
             await _userRepository.Commit();
             var createdUser = Mapper.Map<User, UserViewModel>(_newUser);
             var json = JsonConvert.SerializeObject(createdUser, _serializerSettings);
+            return new OkObjectResult(json);
+        }
+
+        [HttpGet("GetData",Name ="GetUsers")]
+        public async Task<IActionResult> Get()
+        {
+            var pagination = Request.Headers["Pagination"];
+            if (!string.IsNullOrEmpty(pagination))
+            {
+                string[] vals = pagination.ToString().Split(',');
+                int.TryParse(vals[0], out page);
+                int.TryParse(vals[1], out pageSize);
+            }
+            var q = Request.Headers["q"].ToString();
+            int currentPage = page;
+            int currentPageSize = pageSize;
+            var data = await _userRepository.FindByAsync(x => x.UserName.Contains(q) || x.FullName.Contains(q) || x.Email.Contains(q));
+            var totalData = data.Count();
+            var totalPages = (int)Math.Ceiling((double)totalData / pageSize);
+            Response.AddPagination(page, pageSize, totalData, totalPages);
+            data.Skip(page * pageSize).Take(pageSize);
+
+            var _result = Mapper.Map<IEnumerable<User>, IEnumerable<UserViewModel>>(data);
+            var json = JsonConvert.SerializeObject(_result, _serializerSettings);
             return new OkObjectResult(json);
         }
     }

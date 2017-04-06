@@ -17,7 +17,9 @@ namespace CoreIdentity.API.Model.Mappings
                 r => r.MapFrom(o => o.UserRole));
             Mapper.CreateMap<Category, CategoryViewModel>().ForMember(x => x.Children,
                 r => r.MapFrom(o => o.SubCategory));
-            
+            Mapper.CreateMap<Product, ProductViewModel>().ForMember(x => x.CategoryName,
+                r => r.MapFrom(e => e.Category.CategoryName));
+            Mapper.CreateMap<ProductAttribute, ProductAttributeViewModel>();
             
         }
     }

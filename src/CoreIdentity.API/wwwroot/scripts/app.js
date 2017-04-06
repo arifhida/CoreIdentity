@@ -17,7 +17,7 @@
             if (!$rootScope.globals && toState.name != 'login') {
                 event.preventDefault();                
                 return $state.go('login');
-            }
+            }            
         });
     });
 })();

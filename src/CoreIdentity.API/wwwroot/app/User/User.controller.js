@@ -4,11 +4,18 @@
 (function () {
     angular.module('app').controller('UsersController', [
         '$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+            $scope.q = '';
+            $scope.page = 0;
+            $scope.totalPage = 0;
+            $scope.pageSize = 10;
             $scope.getData = function () {
-                $http.get('api/Admin/GetUser').then(function (response) {
+                $http.get('api/User/GetData', { headers: { 'q': $scope.q, 'Pagination': $scope.page + ',' + $scope.pageSize } }).then(function (response) {
                     if (response.status == 200) {
                         $scope.Userlist = response.data;
-                        console.log($scope.Userlist)
+                        var pagination = JSON.parse(response.headers('Pagination'))                       
+                        $scope.page = pagination.CurrentPage;
+                        $scope.totalPage = pagination.TotalPages;
+                        $scope.pageSize = pagination.ItemsPerPage;
                     } else {
                         console.log(response);
                     }
@@ -16,6 +23,14 @@
                 });
             }
             $scope.getData();
+            $scope.next = function () {
+                $scope.page = ($scope.page + 1 < $scope.totalPage) ? $scope.page += 1 : $scope.page;
+                $scope.getData();
+            }
+            $scope.prev = function () {
+                $scope.page = ($scope.page > 0) ? $scope.page -= 1 : 0;
+                $scope.getData();
+            }
         }
     ]).controller('DetailUserController', function ($scope, $http, $stateParams, initialData,$state) {
         var param = $stateParams.id;

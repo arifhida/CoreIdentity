@@ -26,8 +26,9 @@
         }
         $scope.reset = function () {
             $scope.cat = angular.copy(defcat);
+            $scope.frmCat.$setPristine();
         }
-        $scope.reset();
+        $scope.cat = angular.copy(defcat);
         $scope.addItem = function (scope,parentId) {
             console.log($scope);
             nodeData = scope.$modelValue;

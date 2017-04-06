@@ -4,18 +4,25 @@
 "use strict";
 (function () {
     angular.module('app').controller('roleController', [
-        '$scope', '$http', '$rootScope', 'initialData', function ($scope, $http, $rootScope, initialData) {
+        '$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
             $scope.loading = false;
             $scope.q = '';
+            $scope.page = 0;
+            $scope.totalPage = 0;
+            $scope.pageSize = 10;
             $scope.getData = function () {
-                $http.get('api/Role/GetData', { headers: { 'Content-Type': 'application/json', 'q': $scope.q }}).then(function (response) {
-                    $scope.roleList = angular.copy(response.data);
+                $http.get('api/Role/GetData', { headers: { 'Content-Type': 'application/json', 'q': $scope.q, 'Pagination': $scope.page + ',' + $scope.pageSize } }).then(function (response) {
+                    $scope.roleList = response.data;
+                    var pagination = JSON.parse(response.headers('Pagination'))
+                    $scope.page = pagination.CurrentPage;
+                    $scope.totalPage = pagination.TotalPages;
+                    $scope.pageSize = pagination.ItemsPerPage;
                 });
             }
-            $scope.roleList = angular.copy(initialData);
+            //$scope.roleList = angular.copy(initialData);
             $scope.RoleId = 0;
             var original = $scope.Role;
-
+            $scope.getData();
             $scope.roleClick = function (role) {
                 var element = angular.element('#myModal');
                 console.log(element);
@@ -48,6 +55,7 @@
                                 }                                
                             }                            
                             element.modal('hide');
+                            $scope.reset();
                         }, function (error) {
                             console.log(error);
                             $scope.loading = false;

@@ -25,13 +25,15 @@
                         </ol>
                     </div>
                 </div>
+                <div class="box-footer">                    
+                </div>
             </div>
         </div>
     </div>
 </section>
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
-        <form class="form-horizontal" ng-submit="Save(cat)" name="frmCat">
+        <form class="form-horizontal" name="frmCat" ng-submit="Save(cat)">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -54,7 +56,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">Close</button>
                     <button type="submit" id="btnSave" ng-disabled="frmCat.$invalid ||loading" class="btn btn-primary"><i class="fa fa-spinner fa-spin" ng-show="loading"></i> Save changes</button>
                 </div>
             </div>
@@ -70,7 +72,10 @@
           'fa-chevron-right': collapsed,
           'fa-chevron-down': !collapsed
         }"></span>
-        </a>
+        </a> 
+        <button class="btn btn-primary btn-xs disabled" ng-if="!node.Children || node.Children.length == 0">
+            <i class="fa fa-minus"></i>
+        </button>               
         {{node.CategoryName}}
         <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="del(this,node.Id)">
             <span class="fa fa-remove"></span>

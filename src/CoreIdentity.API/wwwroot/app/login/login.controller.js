@@ -1,8 +1,7 @@
 ﻿"use strict";
 (function () {
     angular.module('authentication').controller('loginController', [
-        '$scope', 'authenticate', function ($scope, authenticate) {
-            var authData = authenticate.isAuthenticated;            
+        '$scope', 'authenticate', function ($scope, authenticate) {            
             $scope.loginData = {
                 Username: '',
                 Password: ''
@@ -19,10 +18,24 @@
                         $scope.error = response.data;
                     }
                     $scope.loading = false;
-                });
-                authenticate.isAuthenticate();
+                });                
             }
-                
+
+        }
+    ]).controller('logoutController', [
+        '$scope', 'authenticate', '$state','$rootScope', function ($scope, authenticate, $state, $rootScope) {
+            $scope.auth = false;            
+            $scope.isAuthenticated = function () {
+                console.log($scope.auth);
+                $scope.auth = authenticate.isAuthenticate();
+                return authenticate.isAuthenticate();
+            }
+            
+            $scope.logout = function () {
+                authenticate.logout();
+                $rootScope.globals = null;
+                $state.go('login');
+            }
         }
     ]);
 })();
