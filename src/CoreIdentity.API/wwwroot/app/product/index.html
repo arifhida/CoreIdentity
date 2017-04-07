@@ -13,8 +13,7 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">
-                        <button type="button" class="btn btn-primary" ui-sref="userNew"><i class="fa fa-plus"></i> Add</button>
-                        <!--<a ui-sref="userNew"><i class="fa fa-plus"></i> Add</a>-->
+                        <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
                     </h3>
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -26,9 +25,31 @@
                     </div>
                 </div>
                 <div class="box-body table-responsive">
-                    <div class="box-footer clearfix">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>SKU</th>
+                                <th>ProductName</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in productList">
+                                <td>{{ $index + (page*pageSize) }}</td>
+                                <td>{{ product.SKU }}</td>
+                                <td>{{ product.ProductName }}</td>
+                                <td>{{ product.ProductDescription }}</td>
+                                <td>{{ product.CategoryName }}</td>
+                                <td>{{ product.UnitPrice }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
 
-                    </div>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ namespace CoreIdentity.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
         public CoreIdentityContext(DbContextOptions options) : base(options) { }
 
@@ -83,16 +84,24 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Product>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Product>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
             modelBuilder.Entity<Product>().HasOne(x => x.Category).WithMany(e => e.Product)
-                .HasForeignKey(e => e.CategoriId).OnDelete(DeleteBehavior.Cascade).IsRequired(true);            
-            modelBuilder.Entity<Category>().Ignore(e => e.Delete);
+                .HasForeignKey(e => e.CategoriId).OnDelete(DeleteBehavior.Cascade).IsRequired(true);
+            modelBuilder.Entity<Product>().HasOne(x => x.Brand).WithMany(e => e.Product)
+                .HasForeignKey(e => e.BrandId).OnDelete(DeleteBehavior.SetNull);          
+            modelBuilder.Entity<Product>().Ignore(e => e.Delete);
 
             modelBuilder.Entity<ProductAttribute>().ToTable("ProductAttribute");
             modelBuilder.Entity<ProductAttribute>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<ProductAttribute>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<ProductAttribute>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
-            modelBuilder.Entity<Category>().Ignore(e => e.Delete);
+            modelBuilder.Entity<ProductAttribute>().Ignore(e => e.Delete);
             modelBuilder.Entity<ProductAttribute>().HasOne(x => x.Product).WithMany(r => r.Attribute)
                 .HasForeignKey(e => e.ProductId).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Brand>().ToTable("Brand");
+            modelBuilder.Entity<Brand>().Property(x => x.BrandName).HasMaxLength(250);
+            modelBuilder.Entity<Brand>().Property(x => x.Description).HasMaxLength(550);
+            modelBuilder.Entity<Brand>().Ignore(e => e.Delete);
+
 
 
             base.OnModelCreating(modelBuilder);

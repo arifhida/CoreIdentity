@@ -17,6 +17,8 @@ namespace CoreIdentity.Model.Entities
         public decimal UnitPrice { get; set; }
         public long CategoriId { get; set; }
         public virtual Category Category { get; set; }
+        public long? BrandId { get; set; }
+        public Brand Brand { get; set; }
         public virtual ICollection<ProductAttribute> Attribute { get; set; }
     }
 }
