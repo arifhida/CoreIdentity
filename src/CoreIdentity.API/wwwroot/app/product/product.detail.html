@@ -1,0 +1,90 @@
+﻿<section class="content-header">
+    <h1>
+        Product
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-users"></i> Home</a></li>
+        <li class="active">Product</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{data.SKU }} - {{ data.ProductName}}</h3>
+                </div>
+                <form name="form" role="form" class="form-horizontal">
+                    <div class="box-body with-border">
+                        <div class="col-md-6">
+                            <div class="form-group" ng-class="{ 'has-error': form.SKU.$dirty && form.SKU.$error.required }">
+                                <label for="SKU">SKU</label>
+                                <input type="text" class="form-control" name="SKU" ng-model="data.SKU" placeholder="Enter SKU" required>
+                                <span ng-show="form.SKU.$dirty && form.SKU.$error.required" class="help-block">SKU is required</span>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': form.productName.$dirty && form.productName.$error.required }">
+                                <label for="productName">Product Name</label>
+                                <input type="text" class="form-control" name="productName" ng-model="data.ProductName" placeholder="Enter Product Name" required>
+                                <span ng-show="form.productName.$dirty && form.productName.$error.required" class="help-block">Product Name is required</span>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': form.brand.$dirty && form.brand.$error.required }">
+                                <label for="brand">Brand</label>
+                                <select name="brand" class="form-control" ng-model="brand" ng-options="x.BrandName for x in brandList"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <input type="text" class="form-control" name="category" ng-model="query" ng-change="findNodes()" />
+                                <div class="suggestion" ng-show="autocomplete" style="padding:5px;">
+                                    <div ui-tree id="tree-root">
+                                        <ul ui-tree-nodes ng-model="categoryList">
+                                            <li ng-repeat="node in categoryList" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="visible(node)"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <input type="hidden" ng-model="data.CategoryId" required name="categoryId" />
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': form.productDesc.$dirty && form.productDesc.$error.required }">
+                                <label for="productDesc">Description</label>
+                                <textarea name="productDesc" ng-model="data.ProductDescription" class="form-control" required></textarea>
+                                <span ng-show="form.productDesc.$dirty && form.productDesc.$error.required" class="help-block">Product Description is required</span>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': form.unitPrice.$dirty && form.unitPrice.$error.required }">
+                                <label for="unitPrice">Unit Price</label>
+                                <input type="number" step="any" ng-model="data.UnitPrice" class="form-control" name="unitPrice" required />
+                                <span ng-show="form.unitPrice.$dirty && form.unitPrice.$error.required" class="help-block">Unit price is required</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="thumbnail">Picture</label>
+                                <input type="file" name="thumbnail" id="thumbnail" />                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+                        <button type="button" class="btn btn-primary">
+                            <i class="fa fa-spinner fa-spin" ng-show="loading"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/ng-template" id="nodes_renderer.html">
+    <a class="btn btn-success btn-xs" ng-if="node.Children && node.Children.length > 0" data-nodrag ng-click="toggle(this)">
+        <span class="fa"
+              ng-class="{
+          'fa-chevron-right': collapsed,
+          'fa-chevron-down': !collapsed
+        }"></span>
+    </a>
+    <button class="btn btn-primary btn-xs disabled" ng-if="!node.Children || node.Children.length == 0">
+        <i class="fa fa-minus"></i>
+    </button>
+    <a ng-click="setCategory(node)" href="#" ng-if="!node.Children || node.Children.length == 0">{{node.CategoryName}}</a>
+    <a href="#" ng-if="node.Children && node.Children.length > 0">{{node.CategoryName}}</a>
+    <ul ui-tree-nodes="" ng-model="node.Children" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.Children" ui-tree-node ng-include="'nodes_renderer.html'">
+        </li>
+    </ul>
+</script>

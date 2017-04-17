@@ -14,6 +14,7 @@ namespace CoreIdentity.Model.Entities
         public string SKU { get; set; }
         public string ProductName { get; set; } 
         public string ProductDescription { get; set; }
+        public string PictureUrl { get; set; }
         public decimal UnitPrice { get; set; }
         public long CategoriId { get; set; }
         public virtual Category Category { get; set; }

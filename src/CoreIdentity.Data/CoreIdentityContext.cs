@@ -80,6 +80,7 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Product>().Property(x => x.SKU).HasMaxLength(100);
             modelBuilder.Entity<Product>().Property(e => e.ProductName).HasMaxLength(256);
             modelBuilder.Entity<Product>().Property(e => e.ProductDescription).HasMaxLength(550);
+            modelBuilder.Entity<Product>().Property(e => e.PictureUrl).HasMaxLength(550);
             modelBuilder.Entity<Product>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<Product>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Product>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
@@ -100,6 +101,8 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Brand>().ToTable("Brand");
             modelBuilder.Entity<Brand>().Property(x => x.BrandName).HasMaxLength(250);
             modelBuilder.Entity<Brand>().Property(x => x.Description).HasMaxLength(550);
+            modelBuilder.Entity<Brand>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Brand>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Brand>().Ignore(e => e.Delete);
 
 

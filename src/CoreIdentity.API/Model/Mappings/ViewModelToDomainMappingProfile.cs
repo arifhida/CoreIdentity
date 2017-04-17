@@ -17,7 +17,8 @@ namespace CoreIdentity.API.Model.Mappings
             Mapper.CreateMap<UserInRoleViewModel, UserInRole>();
             Mapper.CreateMap<CategoryViewModel, Category>();
             Mapper.CreateMap<ProductViewModel, Product>();
-            Mapper.CreateMap<ProductAttributeViewModel, ProductAttribute>();                 
+            Mapper.CreateMap<ProductAttributeViewModel, ProductAttribute>();
+            Mapper.CreateMap<BrandViewModel, Brand>();                
         }
     }
 }

@@ -7,23 +7,15 @@ using System.Threading.Tasks;
 
 namespace CoreIdentity.API.Model
 {
-    public class ProductViewModel
+    public class BrandViewModel
     {
         public long Id { get; set; }
-        public string SKU { get; set; }
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
-        public string PictureUrl { get; set; }
-        public decimal UnitPrice { get; set; }
-        public long CategoriId { get; set; }
-        public string CategoryName { get; set; }
-        public long BrandId { get; set; }
         public string BrandName { get; set; }
-        public List<ProductAttributeViewModel> Attribute { get; set; }
+        public string Description { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var validator = new ProductViewModelValidator();
+            var validator = new BrandViewModelValidator();
             var result = validator.Validate(this);
             return result.Errors.Select(item => new ValidationResult(item.ErrorMessage, new[] { item.PropertyName }));
         }

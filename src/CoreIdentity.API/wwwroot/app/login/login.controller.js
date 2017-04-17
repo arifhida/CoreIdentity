@@ -25,8 +25,7 @@
     ]).controller('logoutController', [
         '$scope', 'authenticate', '$state','$rootScope', function ($scope, authenticate, $state, $rootScope) {
             $scope.auth = false;            
-            $scope.isAuthenticated = function () {
-                console.log($scope.auth);
+            $scope.isAuthenticated = function () {                
                 $scope.auth = authenticate.isAuthenticate();
                 return authenticate.isAuthenticate();
             }

@@ -3,7 +3,6 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "System.ComponentModel.Annotations": "4.3.0",
     "Npgsql.EntityFrameworkCore.PostgreSQL": "1.1.0"
   },
 

@@ -18,8 +18,10 @@ namespace CoreIdentity.API.Model.Mappings
             Mapper.CreateMap<Category, CategoryViewModel>().ForMember(x => x.Children,
                 r => r.MapFrom(o => o.SubCategory));
             Mapper.CreateMap<Product, ProductViewModel>().ForMember(x => x.CategoryName,
-                r => r.MapFrom(e => e.Category.CategoryName));
+                r => r.MapFrom(e => e.Category.CategoryName))
+                .ForMember(x => x.BrandName, r => r.MapFrom(o => o.Brand.BrandName));
             Mapper.CreateMap<ProductAttribute, ProductAttributeViewModel>();
+            Mapper.CreateMap<Brand, BrandViewModel>();
             
         }
     }
