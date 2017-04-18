@@ -34,8 +34,7 @@ namespace CoreIdentity.Data.Abstract
 
     public interface IUserRepository : IEntityBaseRepository<User> { }
     public interface IRoleRepository : IEntityBaseRepository<Role> { }
-    public interface IUserInRoleRepository : IEntityBaseRepository<UserInRole> { }
-    public interface IOrderRequestRepository : IEntityBaseRepository<OrderRequest> { }
+    public interface IUserInRoleRepository : IEntityBaseRepository<UserInRole> { }    
     public interface ICategoryRepository : IEntityBaseRepository<Category> { }
     public interface IProductRepository : IEntityBaseRepository<Product> { }
     public interface IProductAttributeRepository : IEntityBaseRepository<ProductAttribute> { }

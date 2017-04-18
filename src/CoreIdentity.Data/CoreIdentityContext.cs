@@ -12,12 +12,13 @@ namespace CoreIdentity.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserInRole> UserInRoles { get; set; }
-        public DbSet<OrderRequest> OrderRequests { get; set; }
+        public DbSet<UserInRole> UserInRoles { get; set; }        
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         public CoreIdentityContext(DbContextOptions options) : base(options) { }
 
@@ -57,14 +58,15 @@ namespace CoreIdentity.Data
                 .WithMany(ui => ui.UserRole).HasForeignKey(ui => ui.UserId).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<UserInRole>().Ignore(e => e.Delete);
 
+            modelBuilder.Entity<Customer>().ToTable("Customer");
+            modelBuilder.Entity<Customer>().Property(e => e.Address).HasMaxLength(550);
+            modelBuilder.Entity<Customer>().Property(e => e.City).HasMaxLength(250);
+            modelBuilder.Entity<Customer>().Property(e => e.Province).HasMaxLength(250);
+            modelBuilder.Entity<Customer>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
+            modelBuilder.Entity<Customer>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
+            modelBuilder.Entity<Customer>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
+            modelBuilder.Entity<Customer>().Ignore(e => e.Delete);
 
-            modelBuilder.Entity<OrderRequest>().ToTable("OrderRequest");    
-            modelBuilder.Entity<OrderRequest>().Property(e=> e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
-            modelBuilder.Entity<OrderRequest>().Property(e=> e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
-            modelBuilder.Entity<OrderRequest>().Property(e => e.isActive).ForNpgsqlHasDefaultValue(true);
-            modelBuilder.Entity<OrderRequest>().HasOne(a => a.User)
-                .WithMany(u => u.Order);
-            modelBuilder.Entity<OrderRequest>().Ignore(e => e.Delete);
 
             modelBuilder.Entity<Category>().ToTable("Category");
             modelBuilder.Entity<Category>().Property(e => e.CategoryName).HasMaxLength(256);
@@ -104,6 +106,12 @@ namespace CoreIdentity.Data
             modelBuilder.Entity<Brand>().Property(e => e.CreatedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAdd();
             modelBuilder.Entity<Brand>().Property(e => e.ModifiedDate).ForNpgsqlHasDefaultValueSql("current_timestamp").ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Brand>().Ignore(e => e.Delete);
+
+            modelBuilder.Entity<ProductImage>().ToTable("ProductImage");
+            modelBuilder.Entity<ProductImage>().Property(e => e.ImageUrl).HasMaxLength(550);
+            modelBuilder.Entity<ProductImage>().HasOne(x => x.Product).WithMany(r => r.Image)
+                .HasForeignKey(e => e.ProductId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductImage>().Ignore(e => e.Delete);
 
 
 

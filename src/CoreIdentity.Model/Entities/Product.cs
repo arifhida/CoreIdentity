@@ -10,6 +10,7 @@ namespace CoreIdentity.Model.Entities
         public Product()
         {
             Attribute = new List<ProductAttribute>();
+            Image = new List<ProductImage>();
         }
         public string SKU { get; set; }
         public string ProductName { get; set; } 
@@ -21,5 +22,6 @@ namespace CoreIdentity.Model.Entities
         public long? BrandId { get; set; }
         public Brand Brand { get; set; }
         public virtual ICollection<ProductAttribute> Attribute { get; set; }
+        public ICollection<ProductImage> Image { get; set; }
     }
 }

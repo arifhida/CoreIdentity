@@ -2,7 +2,7 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    
+    "angular-multiple-file-upload": "1.5.10"
   }
   
 }

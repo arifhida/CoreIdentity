@@ -9,8 +9,7 @@ namespace CoreIdentity.Model.Entities
     {                  
         public User()
         {
-            UserRole = new List<UserInRole>();            
-            Order = new List<OrderRequest>();
+            UserRole = new List<UserInRole>();              
         }
         public string UserName { get; set; }
         public string FullName { get; set; }
@@ -18,6 +17,6 @@ namespace CoreIdentity.Model.Entities
         public string Password { get; set; }
         public string Salt { get; set; }
         public ICollection<UserInRole> UserRole { get; set; }       
-        public ICollection<OrderRequest> Order { get; set; }
+        
     }
 }

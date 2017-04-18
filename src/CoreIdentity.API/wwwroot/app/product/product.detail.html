@@ -9,7 +9,7 @@
 </section>
 <section class="content">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">{{data.SKU }} - {{ data.ProductName}}</h3>
@@ -52,11 +52,24 @@
                                 <label for="unitPrice">Unit Price</label>
                                 <input type="number" step="any" ng-model="data.UnitPrice" class="form-control" name="unitPrice" required />
                                 <span ng-show="form.unitPrice.$dirty && form.unitPrice.$error.required" class="help-block">Unit price is required</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="thumbnail">Picture</label>
-                                <input type="file" name="thumbnail" id="thumbnail" />                                
-                            </div>
+                            </div>                            
+                        </div>
+                        <div class="col-md-6">
+                            <file-upload class="btn btn-success btn-rad btn-trans file-upload" 
+                                         name="userFile" resize="true" max-width="1280" 
+                                         max-height="1280" ng-model="thumbnail.ProductImage" multiple="false" 
+                                         uri="/upload/upload" accept="image/png, image/jpg">
+                                <i class="fa fa-upload"></i>
+                                <span>Upload Files</span>
+                                <ul>
+                                    <li ng-repeat="p in thumbnail.ProductImage" ng-hide="p.percent == 100">
+                                        <small>{{ p.name }}</small>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: {{ p.percent }}%;"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </file-upload>
                         </div>
                     </div>
                     <div class="box-footer">
